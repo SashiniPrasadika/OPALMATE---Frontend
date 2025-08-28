@@ -11,7 +11,6 @@ const Reports = () => {
 
   const totalOrders = 45;
 
-  // ✅ Handlers for Quick Reports
   const handleSalesReports = () => {
     alert("📊 Sales Report generated successfully!");
   };
@@ -31,7 +30,6 @@ const Reports = () => {
         View business performance and financial insights
       </p>
 
-      {/* Top Stats */}
       <div className="stats-cards">
         <div className="card">
           <h3>This Month Sales</h3>
@@ -55,7 +53,6 @@ const Reports = () => {
         </div>
       </div>
 
-      {/* Monthly Performance */}
       <div className="section">
         <h3 className="section-title">
           <FaFileAlt className="section-icon" /> Monthly Performance
@@ -81,7 +78,6 @@ const Reports = () => {
         </div>
       </div>
 
-      {/* Quick Reports */}
       <div className="section">
         <h3 className="section-title">Quick Reports</h3>
         <div className="quick-buttons">

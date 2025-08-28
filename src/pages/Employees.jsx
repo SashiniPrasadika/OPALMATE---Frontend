@@ -52,7 +52,6 @@ const Employees = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Add or Update employee
   const handleSubmit = (e) => {
     e.preventDefault();
     if (editingEmployee) {

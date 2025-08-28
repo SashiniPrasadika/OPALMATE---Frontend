@@ -66,12 +66,10 @@ const RawMaterials = () => {
     setShowForm(true);
   };
 
-  // ✅ Handle Input Change
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // ✅ Save Material (Add or Edit)
   const handleSave = () => {
     if (editingMaterial) {
       setMaterials(

@@ -12,7 +12,6 @@ const Dashboard = () => {
         Your jewelry business control center
       </p>
 
-      {/* Metrics Section */}
       <div className="dashboard-metrics">
         <div className="metric-card">
           <FaGem className="metric-icon" />

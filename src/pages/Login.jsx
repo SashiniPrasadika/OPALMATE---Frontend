@@ -6,7 +6,6 @@ const Login = () => {
   const [password, setPassword] = useState("");
 
   const handleLogin = () => {
-    // TODO: Connect to backend
     if (email === "admin@erp.com" && password === "1234") {
       alert("Login successful!");
       window.location.href = "/";

@@ -36,17 +36,14 @@ const Products = () => {
     status: "Active",
   });
 
-  // Handle Search
   const filteredProducts = products.filter((product) =>
     product.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Handle Form Change
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Handle Add Product
   const handleAddProduct = () => {
     setFormData({
       id: "",
@@ -67,7 +64,6 @@ const Products = () => {
     setFormVisible(true);
   };
 
-  // Handle Save (Add/Edit)
   const handleSave = () => {
     if (editingProduct) {
       setProducts(
@@ -79,12 +75,10 @@ const Products = () => {
     setFormVisible(false);
   };
 
-  // Handle View
   const handleView = (product) => {
     setViewingProduct(product);
   };
 
-  // Handle Close View
   const closeView = () => {
     setViewingProduct(null);
   };
@@ -99,7 +93,6 @@ const Products = () => {
         </button>
       </div>
 
-      {/* Search */}
       <div className="search-box">
         <FaSearch className="search-icon" />
         <input
@@ -110,7 +103,6 @@ const Products = () => {
         />
       </div>
 
-      {/* Product List */}
       <div className="products-list">
         {filteredProducts.map((product) => (
           <div className="product-card" key={product.id}>
@@ -137,7 +129,6 @@ const Products = () => {
         ))}
       </div>
 
-      {/* Add/Edit Form */}
       {formVisible && (
         <div className="modal">
           <div className="modal-content">
@@ -186,7 +177,6 @@ const Products = () => {
         </div>
       )}
 
-      {/* View Product Modal */}
       {viewingProduct && (
         <div className="modal">
           <div className="modal-content">
