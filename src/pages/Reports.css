@@ -1,0 +1,139 @@
+.reports-container {
+  max-width: 1200px;
+  margin: 30px auto;
+  padding: 30px;
+  font-family: 'Poppins', sans-serif;
+  color: #333;
+}
+
+.reports-title {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.reports-subtitle {
+  font-size: 15px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+/* Top Stats */
+.stats-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.06);
+  text-align: center;
+  position: relative;
+}
+
+.card h3 {
+  font-size: 16px;
+  margin-bottom: 8px;
+  color: #666;
+}
+
+.card .value {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.card .icon {
+  font-size: 24px;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.green { color: #28a745; }
+.red { color: #dc3545; }
+.blue { color: #007bff; }
+
+/* Sections */
+.section {
+  background: #fff;
+  padding: 25px;
+  border-radius: 15px;
+  margin-bottom: 25px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.section-icon {
+  margin-right: 10px;
+  color: #007bff;
+}
+
+/* Monthly Performance */
+.performance-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.performance-item {
+  background: #f9fafc;
+  border-radius: 12px;
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.month-badge {
+  background: #e8f0ff;
+  color: #007bff;
+  padding: 8px 15px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.performance-details {
+  flex: 1;
+  margin-left: 20px;
+  font-size: 14px;
+}
+
+.profit {
+  color: #28a745;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* Quick Reports */
+.quick-buttons {
+  display: flex;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.quick-buttons button {
+  background: #007bff;
+  color: #fff;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.quick-buttons button:hover {
+  background: #0056b3;
+}

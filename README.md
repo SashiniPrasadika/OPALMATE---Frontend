@@ -1,70 +1,199 @@
-# Getting Started with Create React App
+# 💎 OPALMATE Jewelry ERP System
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A complete, modern jewelry business management system built with React, Node.js, and SQLite/MySQL.
 
-## Available Scripts
+## 🚀 Quick Start
 
-In the project directory, you can run:
+### Option 1: One-Click Start (Windows)
+```bash
+# Double-click the start-system.bat file
+start-system.bat
+```
 
-### `npm start`
+### Option 2: Manual Start
+```bash
+# Start Backend
+cd backend
+npm run dev
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+# In a new terminal, start Frontend
+npm start
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🌐 Access the System
 
-### `npm test`
+- **Frontend Application**: http://localhost:3000
+- **Backend API**: http://localhost:5000
+- **API Documentation**: http://localhost:5000/api
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 📋 System Features
 
-### `npm run build`
+### 🏢 Business Management
+- **Product Management**: Complete jewelry inventory
+- **Customer Management**: CRM with purchase history
+- **Employee Management**: Staff and role management
+- **Supplier Management**: Vendor relationships
+- **Raw Materials**: Inventory tracking
+- **Transactions**: Sales and purchase records
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 🔐 Security
+- JWT Authentication
+- Role-based access control
+- Password encryption
+- Protected API routes
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### 📊 Analytics
+- Dashboard with key metrics
+- Transaction reports
+- Stock alerts
+- Customer analytics
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 🗄️ Database
 
-### `npm run eject`
+The system uses **SQLite** by default (no setup required) but can be configured for **MySQL**:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### SQLite (Default)
+- File-based database
+- No installation required
+- Perfect for development and small businesses
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### MySQL (Production)
+Set these environment variables:
+```bash
+DB_TYPE=mysql
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=your_password
+DB_NAME=opalmate_db
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 🔧 API Endpoints
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Authentication
+- `POST /api/auth/register` - Register new user
+- `POST /api/auth/login` - User login
+- `GET /api/auth/profile` - Get user profile
 
-## Learn More
+### Products
+- `GET /api/products` - List all products
+- `POST /api/products` - Create product
+- `PUT /api/products/:id` - Update product
+- `DELETE /api/products/:id` - Delete product
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Customers
+- `GET /api/customers` - List all customers
+- `POST /api/customers` - Create customer
+- `GET /api/customers/vip` - VIP customers
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### And many more...
 
-### Code Splitting
+## 🛠️ Development
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### Prerequisites
+- Node.js (v14 or higher)
+- npm or yarn
 
-### Analyzing the Bundle Size
+### Installation
+```bash
+# Install dependencies
+npm install
+cd backend && npm install
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+# Start development servers
+npm run dev  # Backend
+npm start    # Frontend
+```
 
-### Making a Progressive Web App
+### Testing
+```bash
+cd backend
+npm test
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## 📁 Project Structure
 
-### Advanced Configuration
+```
+my-app/
+├── backend/                 # Backend API
+│   ├── config/             # Database configuration
+│   ├── controllers/        # API controllers
+│   ├── models/            # Database models
+│   ├── routes/            # API routes
+│   ├── middleware/        # Authentication middleware
+│   └── tests/             # API tests
+├── src/                   # Frontend React app
+│   ├── components/        # React components
+│   ├── pages/            # Page components
+│   └── ...
+├── public/               # Static files
+└── database.sqlite       # SQLite database file
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## 🎯 Use Cases
 
-### Deployment
+### For Jewelry Stores
+- Manage inventory of rings, necklaces, earrings
+- Track customer preferences and purchase history
+- Monitor stock levels and reorder points
+- Generate sales reports and analytics
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### For Jewelry Manufacturers
+- Track raw materials (gold, diamonds, etc.)
+- Manage supplier relationships
+- Monitor production costs
+- Track work orders and deliveries
 
-### `npm run build` fails to minify
+## 🔒 Security Features
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- **JWT Authentication**: Secure token-based auth
+- **Password Hashing**: bcrypt encryption
+- **Input Validation**: Prevent SQL injection
+- **CORS Protection**: Secure cross-origin requests
+- **Role-based Access**: Admin, Manager, Employee roles
+
+## 📈 Production Deployment
+
+### Environment Variables
+```bash
+JWT_SECRET=your_jwt_secret
+DB_TYPE=mysql
+DB_HOST=your_db_host
+DB_USER=your_db_user
+DB_PASSWORD=your_db_password
+DB_NAME=your_db_name
+PORT=5000
+```
+
+### Database Setup
+1. Install MySQL Server
+2. Create database: `CREATE DATABASE opalmate_db;`
+3. Set environment variables
+4. Run migrations: `npm run migrate`
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests
+5. Submit a pull request
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+## 🆘 Support
+
+If you encounter any issues:
+1. Check the console for error messages
+2. Verify all dependencies are installed
+3. Ensure ports 3000 and 5000 are available
+4. Check database connection settings
+
+## 🎉 Success!
+
+Your OPALMATE Jewelry ERP system is now ready to manage your jewelry business efficiently and professionally!
+
+---
+
+**Built with ❤️ for the jewelry industry**

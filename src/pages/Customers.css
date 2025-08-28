@@ -1,0 +1,249 @@
+/* Container */
+.customers-container {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: #f8fbff;
+  border-radius: 15px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Header */
+.customers-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.customers-header h1 {
+  font-size: 28px;
+  color: #333;
+  margin: 0;
+}
+
+.customers-header p {
+  font-size: 14px;
+  color: #666;
+  margin: 5px 0 0 0;
+}
+
+/* Add Button */
+.add-btn {
+  background-color: #3498db;
+  color: #fff;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+  transition: background 0.3s;
+}
+
+.add-btn:hover {
+  background-color: #2980b9;
+}
+
+/* Search Bar */
+.search-bar {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 6px 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+.search-bar .search-icon {
+  margin-right: 8px;
+  color: #3498db;
+}
+
+.search-bar input {
+  border: none;
+  outline: none;
+  font-size: 14px;
+  width: 100%;
+}
+
+/* Form */
+.customer-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 25px;
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.customer-form input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  flex: 1 1 200px;
+  font-size: 14px;
+}
+
+.form-buttons {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.form-buttons button {
+  flex: 1;
+  padding: 10px;
+  font-weight: 500;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.form-buttons button[type="submit"] {
+  background-color: #2ecc71;
+  color: #fff;
+}
+
+.form-buttons button[type="submit"]:hover {
+  background-color: #27ae60;
+}
+
+.form-buttons button[type="button"] {
+  background-color: #e74c3c;
+  color: #fff;
+}
+
+.form-buttons button[type="button"]:hover {
+  background-color: #c0392b;
+}
+
+/* Customer List */
+.customers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Customer Card */
+.customer-card {
+  display: flex;
+  justify-content: space-between;
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.customer-info {
+  display: flex;
+  gap: 15px;
+  flex: 1;
+}
+
+.customer-avatar {
+  font-size: 40px;
+  background-color: #3498db;
+  color: #fff;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.customer-details h2 {
+  margin: 0 0 5px 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.customer-details p {
+  margin: 3px 0;
+  font-size: 14px;
+  color: #555;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+}
+
+.star-icon {
+  color: #f1c40f;
+  margin-right: 5px;
+}
+
+/* Action Buttons */
+.customer-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.customer-actions button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: background 0.3s;
+}
+
+.edit-btn {
+  background-color: #f1c40f;
+  color: #fff;
+}
+
+.edit-btn:hover {
+  background-color: #d4ac0d;
+}
+
+.orders-btn {
+  background-color: #3498db;
+  color: #fff;
+}
+
+.orders-btn:hover {
+  background-color: #2980b9;
+}
+
+.delete-btn {
+  background-color: #e74c3c;
+  color: #fff;
+}
+
+.delete-btn:hover {
+  background-color: #c0392b;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .customer-card {
+    flex-direction: column;
+  }
+
+  .customer-actions {
+    justify-content: flex-start;
+  }
+}
