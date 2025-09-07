@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import "./Employees.css";
+import employeeIcon from "../assets/employees.png";
+import envelopeIcon from "../assets/envelope.png";
+import phoneIcon from "../assets/phone-call.png";
 
 const Employees = () => {
   const [employees, setEmployees] = useState([
@@ -61,10 +64,7 @@ const Employees = () => {
         )
       );
     } else {
-      setEmployees([
-        ...employees,
-        { id: Date.now(), ...formData },
-      ]);
+      setEmployees([...employees, { id: Date.now(), ...formData }]);
     }
     setShowForm(false);
     setEditingEmployee(null);
@@ -79,14 +79,12 @@ const Employees = () => {
     });
   };
 
-  // Edit employee
   const handleEdit = (employee) => {
     setEditingEmployee(employee);
     setFormData(employee);
     setShowForm(true);
   };
 
-  // View employee
   const handleView = (employee) => {
     alert(`
       Name: ${employee.name}
@@ -108,23 +106,24 @@ const Employees = () => {
       </div>
 
       {/* Search bar */}
-      <input
-        type="text"
-        className="search-bar"
-        placeholder="Search employees..."
-      />
+      <input type="text" className="search-bar" placeholder="Search employees..." />
 
       {/* Employee List */}
       <div className="employee-list">
         {employees.map((employee) => (
           <div className="employee-card" key={employee.id}>
             <div className="employee-info">
-              <div className="employee-avatar">👤</div>
+              <img src={employeeIcon} alt="employee" className="employee-avatar" />
               <div>
-                <h3>{employee.name} <span className="status">{employee.status}</span></h3>
+                <h3>
+                  {employee.name} <span className="status">{employee.status}</span>
+                </h3>
                 <p>Role: {employee.role}</p>
                 <p>Department: {employee.department}</p>
-                <p>📧 {employee.email} | 📞 {employee.phone}</p>
+                <p>
+                  <img src={envelopeIcon} alt="email" className="icon" /> {employee.email} |
+                  <img src={phoneIcon} alt="phone" className="icon" /> {employee.phone}
+                </p>
                 <p>Joined: {employee.joined}</p>
               </div>
             </div>
@@ -163,6 +162,3 @@ const Employees = () => {
 };
 
 export default Employees;
-
-
-

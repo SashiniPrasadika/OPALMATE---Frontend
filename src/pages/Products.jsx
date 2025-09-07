@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { FaSearch, FaGem, FaPlus } from "react-icons/fa";
+import { FaSearch, FaPlus } from "react-icons/fa";
+import productIcon from "../assets/product.png"; // your product icon
 import "./Products.css";
 
 const Products = () => {
@@ -57,7 +58,6 @@ const Products = () => {
     setFormVisible(true);
   };
 
-  // Handle Edit
   const handleEdit = (product) => {
     setEditingProduct(product);
     setFormData(product);
@@ -107,7 +107,7 @@ const Products = () => {
         {filteredProducts.map((product) => (
           <div className="product-card" key={product.id}>
             <div className="product-icon">
-              <FaGem />
+              <img src={productIcon} alt="Product" className="product-img" />
             </div>
             <div className="product-info">
               <h3>{product.name}</h3>
@@ -195,4 +195,3 @@ const Products = () => {
 };
 
 export default Products;
-

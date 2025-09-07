@@ -6,7 +6,6 @@
   color: #333;
 }
 
-/* ---------- Header ---------- */
 .header {
   display: flex;
   align-items: center;
@@ -42,7 +41,6 @@
   background-color: #0066d6;
 }
 
-/* ---------- Search Bar ---------- */
 .search-bar {
   width: 100%;
   padding: 12px 15px;
@@ -50,66 +48,6 @@
   border: 1px solid #ddd;
   margin-bottom: 25px;
   font-size: 14px;
-}
-
-/* ---------- Workflow Form ---------- */
-.workflow-form {
-  background: #f9fbff;
-  border: 1px solid #ddd;
-  padding: 20px;
-  border-radius: 12px;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-}
-
-.workflow-form h3 {
-  margin-bottom: 12px;
-  font-size: 18px;
-  font-weight: 600;
-}
-
-.workflow-form input {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 12px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 14px;
-  outline: none;
-  transition: 0.2s;
-}
-
-.workflow-form input:focus {
-  border-color: #007bff;
-  box-shadow: 0 0 5px rgba(0,123,255,0.3);
-}
-
-.save-btn {
-  background: #007bff;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-right: 10px;
-  font-weight: 500;
-}
-
-.save-btn:hover {
-  background: #0066d6;
-}
-
-.cancel-btn {
-  background: #f1f3f6;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 500;
-}
-
-.cancel-btn:hover {
-  background: #e1e3e8;
 }
 
 /* ---------- Workflow Cards ---------- */
@@ -147,7 +85,6 @@
   margin: 8px 0 15px 0;
 }
 
-/* ---------- Steps ---------- */
 .steps {
   display: flex;
   flex-wrap: wrap;
@@ -171,7 +108,6 @@
   margin: 0 4px;
 }
 
-/* ---------- Actions ---------- */
 .actions {
   display: flex;
   gap: 10px;
@@ -202,5 +138,83 @@
 
 .delete-btn:hover {
   background: #ffcccc;
+}
+
+.icon-btn {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+/* ---------- Modal ---------- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.workflow-form input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: 0.2s;
+}
+
+.workflow-form input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0,123,255,0.3);
+}
+
+.form-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.save-btn {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.save-btn:hover {
+  background: #0066d6;
+}
+
+.cancel-btn {
+  background: #f1f3f6;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.cancel-btn:hover {
+  background: #e1e3e8;
 }
 

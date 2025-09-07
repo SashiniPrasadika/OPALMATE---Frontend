@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import "./Workflows.css";
+import editIcon from "../assets/edit.png";
+import deleteIcon from "../assets/delete.png";
 
 const Workflows = () => {
   const [workflows, setWorkflows] = useState([
@@ -42,12 +44,10 @@ const Workflows = () => {
     steps: "",
   });
 
-  // 🔹 Handle form input
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // 🔹 Create or Update workflow
   const handleSubmit = (e) => {
     e.preventDefault();
     if (editingWorkflow) {
@@ -73,7 +73,6 @@ const Workflows = () => {
     setShowForm(false);
   };
 
-  // 🔹 Edit workflow
   const handleEdit = (workflow) => {
     setEditingWorkflow(workflow);
     setFormData({
@@ -84,17 +83,6 @@ const Workflows = () => {
     setShowForm(true);
   };
 
-  // 🔹 Duplicate workflow
-  const handleDuplicate = (workflow) => {
-    const duplicate = {
-      ...workflow,
-      id: Date.now(),
-      title: workflow.title + " (Copy)",
-    };
-    setWorkflows([...workflows, duplicate]);
-  };
-
-  // 🔹 Delete workflow
   const handleDelete = (id) => {
     setWorkflows(workflows.filter((wf) => wf.id !== id));
   };
@@ -115,48 +103,7 @@ const Workflows = () => {
         className="search-bar"
       />
 
-      {/* 🔹 Workflow Form */}
-      {showForm && (
-        <form className="workflow-form" onSubmit={handleSubmit}>
-          <h3>{editingWorkflow ? "Edit Workflow" : "Create Workflow"}</h3>
-          <input
-            type="text"
-            name="title"
-            placeholder="Workflow Title"
-            value={formData.title}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="text"
-            name="description"
-            placeholder="Description"
-            value={formData.description}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="text"
-            name="steps"
-            placeholder="Steps (comma separated)"
-            value={formData.steps}
-            onChange={handleChange}
-            required
-          />
-          <button type="submit" className="save-btn">
-            {editingWorkflow ? "Update" : "Save"}
-          </button>
-          <button
-            type="button"
-            className="cancel-btn"
-            onClick={() => setShowForm(false)}
-          >
-            Cancel
-          </button>
-        </form>
-      )}
-
-      {/* 🔹 Workflow List */}
+      {/* Workflow Cards */}
       {workflows.map((workflow) => (
         <div className="workflow-card" key={workflow.id}>
           <div className="workflow-header">
@@ -179,26 +126,69 @@ const Workflows = () => {
               className="action-btn"
               onClick={() => handleEdit(workflow)}
             >
-              ✏️ Edit
-            </button>
-            <button
-              className="action-btn"
-              onClick={() => handleDuplicate(workflow)}
-            >
-              📑 Duplicate
+              <img src={editIcon} className="icon-btn" alt="Edit" /> Edit
             </button>
             <button
               className="action-btn delete-btn"
               onClick={() => handleDelete(workflow.id)}
             >
-              🗑️ Delete
+              <img src={deleteIcon} className="icon-btn" alt="Delete" /> Delete
             </button>
           </div>
         </div>
       ))}
+
+      {/* Modal Form */}
+      {showForm && (
+        <div className="modal-overlay" onClick={() => setShowForm(false)}>
+          <div
+            className="modal-content"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3>{editingWorkflow ? "Edit Workflow" : "Create Workflow"}</h3>
+            <input
+              type="text"
+              name="title"
+              placeholder="Workflow Title"
+              value={formData.title}
+              onChange={handleChange}
+              required
+            />
+            <input
+              type="text"
+              name="description"
+              placeholder="Description"
+              value={formData.description}
+              onChange={handleChange}
+              required
+            />
+            <input
+              type="text"
+              name="steps"
+              placeholder="Steps (comma separated)"
+              value={formData.steps}
+              onChange={handleChange}
+              required
+            />
+            <div className="form-buttons">
+              <button type="submit" className="save-btn" onClick={handleSubmit}>
+                {editingWorkflow ? "Update" : "Save"}
+              </button>
+              <button
+                type="button"
+                className="cancel-btn"
+                onClick={() => setShowForm(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
 export default Workflows;
+
 

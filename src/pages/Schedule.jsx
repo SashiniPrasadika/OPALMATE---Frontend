@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import "./Schedule.css";
-import { FaCalendarAlt, FaClock, FaPlus, FaTrash, FaEdit } from "react-icons/fa";
+import calendarIcon from "../assets/calendar.png";
+import clockIcon from "../assets/clock.png";
+import plusIcon from "../assets/plus.png";
+import editIcon from "../assets/edit.png";
+import deleteIcon from "../assets/delete.png";
 
 const Schedule = () => {
   const [events, setEvents] = useState([
@@ -16,12 +20,10 @@ const Schedule = () => {
     color: "blue",
   });
 
-  // handle input
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // add / update event
   const handleSubmit = (e) => {
     e.preventDefault();
     if (editingEvent) {
@@ -32,17 +34,13 @@ const Schedule = () => {
       );
       setEditingEvent(null);
     } else {
-      const newEvent = {
-        id: Date.now(),
-        ...formData,
-      };
+      const newEvent = { id: Date.now(), ...formData };
       setEvents([...events, newEvent]);
     }
     setFormData({ title: "", time: "", color: "blue" });
     setShowForm(false);
   };
 
-  // edit event
   const handleEdit = (event) => {
     setEditingEvent(event);
     setFormData({
@@ -53,7 +51,6 @@ const Schedule = () => {
     setShowForm(true);
   };
 
-  // delete event
   const handleDelete = (id) => {
     setEvents(events.filter((ev) => ev.id !== id));
   };
@@ -66,23 +63,27 @@ const Schedule = () => {
           <p>View and manage your calendar</p>
         </div>
         <button className="add-btn" onClick={() => setShowForm(true)}>
-          <FaPlus /> Add Event
+          <img src={plusIcon} className="icon-btn" alt="Add" /> Add Event
         </button>
       </div>
 
       <div className="schedule-body">
         {/* Calendar placeholder */}
         <div className="calendar-view">
-          <h3><FaCalendarAlt /> Calendar View</h3>
+          <h3>
+            <img src={calendarIcon} className="icon-btn" alt="Calendar" /> Calendar View
+          </h3>
           <div className="calendar-placeholder">
-            <FaCalendarAlt size={40} />
+            <img src={calendarIcon} className="large-icon" alt="Calendar" />
             <p>Calendar component will be implemented here</p>
           </div>
         </div>
 
         {/* Today's Events */}
         <div className="events-view">
-          <h3><FaClock /> Today's Events</h3>
+          <h3>
+            <img src={clockIcon} className="icon-btn" alt="Clock" /> Today's Events
+          </h3>
           {events.map((event) => (
             <div key={event.id} className="event-card">
               <span className={`dot ${event.color}`}></span>
@@ -91,8 +92,12 @@ const Schedule = () => {
                 <p className="event-time">{event.time}</p>
               </div>
               <div className="event-actions">
-                <button onClick={() => handleEdit(event)}><FaEdit /></button>
-                <button onClick={() => handleDelete(event.id)}><FaTrash /></button>
+                <button onClick={() => handleEdit(event)}>
+                  <img src={editIcon} className="icon-btn" alt="Edit" />
+                </button>
+                <button onClick={() => handleDelete(event.id)}>
+                  <img src={deleteIcon} className="icon-btn" alt="Delete" />
+                </button>
               </div>
             </div>
           ))}
@@ -147,3 +152,4 @@ const Schedule = () => {
 };
 
 export default Schedule;
+

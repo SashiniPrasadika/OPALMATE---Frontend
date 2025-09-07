@@ -1,15 +1,11 @@
 import React, { useState } from "react";
 import "./Suppliers.css";
-import {
-  FaSearch,
-  FaEnvelope,
-  FaPhone,
-  FaMapMarkerAlt,
-  FaStar,
-  FaPlus,
-  FaEdit,
-  FaBox
-} from "react-icons/fa";
+import supplierIcon from "../assets/supplier.png";
+import phoneIcon from "../assets/phone-call.png";
+import locationIcon from "../assets/location.png";
+import starIcon from "../assets/star.png";
+import plusIcon from "../assets/plus.png"; // optional, for Add button
+import editIcon from "../assets/edit.png"; // optional, for Edit button
 
 const Suppliers = () => {
   const [suppliers, setSuppliers] = useState([
@@ -40,7 +36,6 @@ const Suppliers = () => {
   const [search, setSearch] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [editSupplier, setEditSupplier] = useState(null);
-  const [showOrders, setShowOrders] = useState(false);
 
   const handleAddSupplier = () => {
     setEditSupplier(null);
@@ -50,10 +45,6 @@ const Suppliers = () => {
   const handleEdit = (supplier) => {
     setEditSupplier(supplier);
     setShowForm(true);
-  };
-
-  const handleOrders = () => {
-    setShowOrders(true);
   };
 
   const handleFormSubmit = (e) => {
@@ -91,13 +82,12 @@ const Suppliers = () => {
         <h1>Suppliers</h1>
         <p>Manage your supplier relationships</p>
         <button className="add-btn" onClick={handleAddSupplier}>
-          <FaPlus /> Add Supplier
+          <img src={plusIcon} alt="Add" className="button-icon" /> Add Supplier
         </button>
       </div>
 
       {/* Search Bar */}
       <div className="search-bar">
-        <FaSearch className="search-icon" />
         <input
           type="text"
           placeholder="Search suppliers..."
@@ -111,7 +101,7 @@ const Suppliers = () => {
         {filteredSuppliers.map((supplier) => (
           <div className="supplier-card" key={supplier.id}>
             <div className="supplier-info">
-              <div className="supplier-logo">🏢</div>
+              <img src={supplierIcon} alt="supplier" className="supplier-logo" />
               <div className="supplier-details">
                 <h2>{supplier.name}</h2>
                 <span className="status">{supplier.status}</span>
@@ -120,22 +110,23 @@ const Suppliers = () => {
                   Contact Person: <strong>{supplier.contactPerson}</strong>
                 </p>
                 <div className="rating">
-                  <FaStar className="star-icon" />{" "}
+                  <img src={starIcon} alt="star" className="icon" />{" "}
                   <strong>{supplier.rating}/5.0</strong>
                 </div>
                 <div className="contact">
-                  <p><FaEnvelope /> {supplier.email}</p>
-                  <p><FaPhone /> {supplier.phone}</p>
-                  <p><FaMapMarkerAlt /> {supplier.location}</p>
+                  <p>
+                    <img src={phoneIcon} alt="phone" className="icon" /> {supplier.phone}
+                  </p>
+                  <p>
+                    <img src={locationIcon} alt="location" className="icon" /> {supplier.location}
+                  </p>
+                  <p>Email: {supplier.email}</p>
                 </div>
               </div>
             </div>
             <div className="supplier-actions">
               <button className="edit-btn" onClick={() => handleEdit(supplier)}>
-                <FaEdit /> Edit
-              </button>
-              <button className="orders-btn" onClick={handleOrders}>
-                <FaBox /> Orders
+                <img src={editIcon} alt="Edit" className="button-icon" /> Edit
               </button>
             </div>
           </div>
@@ -148,30 +139,64 @@ const Suppliers = () => {
           <div className="modal-content">
             <h2>{editSupplier ? "Edit Supplier" : "Add Supplier"}</h2>
             <form onSubmit={handleFormSubmit}>
-              <input name="name" placeholder="Supplier Name" defaultValue={editSupplier?.name || ""} required />
-              <input name="category" placeholder="Category" defaultValue={editSupplier?.category || ""} required />
-              <input name="status" placeholder="Status" defaultValue={editSupplier?.status || ""} required />
-              <input name="contactPerson" placeholder="Contact Person" defaultValue={editSupplier?.contactPerson || ""} required />
-              <input name="email" type="email" placeholder="Email" defaultValue={editSupplier?.email || ""} required />
-              <input name="phone" placeholder="Phone" defaultValue={editSupplier?.phone || ""} required />
-              <input name="location" placeholder="Location" defaultValue={editSupplier?.location || ""} required />
-              <input name="rating" type="number" step="0.1" placeholder="Rating" defaultValue={editSupplier?.rating || ""} required />
+              <input
+                name="name"
+                placeholder="Supplier Name"
+                defaultValue={editSupplier?.name || ""}
+                required
+              />
+              <input
+                name="category"
+                placeholder="Category"
+                defaultValue={editSupplier?.category || ""}
+                required
+              />
+              <input
+                name="status"
+                placeholder="Status"
+                defaultValue={editSupplier?.status || ""}
+                required
+              />
+              <input
+                name="contactPerson"
+                placeholder="Contact Person"
+                defaultValue={editSupplier?.contactPerson || ""}
+                required
+              />
+              <input
+                name="email"
+                type="email"
+                placeholder="Email"
+                defaultValue={editSupplier?.email || ""}
+                required
+              />
+              <input
+                name="phone"
+                placeholder="Phone"
+                defaultValue={editSupplier?.phone || ""}
+                required
+              />
+              <input
+                name="location"
+                placeholder="Location"
+                defaultValue={editSupplier?.location || ""}
+                required
+              />
+              <input
+                name="rating"
+                type="number"
+                step="0.1"
+                placeholder="Rating"
+                defaultValue={editSupplier?.rating || ""}
+                required
+              />
               <div className="form-actions">
                 <button type="submit">{editSupplier ? "Update" : "Add"}</button>
-                <button type="button" onClick={() => setShowForm(false)}>Cancel</button>
+                <button type="button" onClick={() => setShowForm(false)}>
+                  Cancel
+                </button>
               </div>
             </form>
-          </div>
-        </div>
-      )}
-
-      {/* Orders Modal */}
-      {showOrders && (
-        <div className="modal">
-          <div className="modal-content">
-            <h2>Supplier Orders</h2>
-            <p>📦 Orders will be displayed here...</p>
-            <button onClick={() => setShowOrders(false)}>Close</button>
           </div>
         </div>
       )}
@@ -180,7 +205,3 @@ const Suppliers = () => {
 };
 
 export default Suppliers;
-
-
-
-

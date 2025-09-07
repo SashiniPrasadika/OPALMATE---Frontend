@@ -1,4 +1,4 @@
-.meetings-container {
+.clientmeeting-container {
   max-width: 1000px;
   margin: 30px auto;
   padding: 20px;
@@ -6,26 +6,25 @@
   color: #2d3748;
 }
 
-/* Header */
-.meetings-header {
+.clientmeeting-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
 }
 
-.meetings-header h2 {
+.clientmeeting-header h2 {
   font-size: 28px;
   font-weight: 600;
   margin: 0;
 }
 
-.meetings-header p {
+.clientmeeting-header p {
   color: #6b7280;
   font-size: 14px;
 }
 
-/* Schedule Button */
+/* Buttons */
 .schedule-btn {
   background: #3b82f6;
   color: white;
@@ -34,53 +33,36 @@
   border-radius: 8px;
   cursor: pointer;
   font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 6px;
   transition: background 0.3s ease;
 }
-
 .schedule-btn:hover {
   background: #2563eb;
 }
 
 /* Search */
 .search-bar {
-  position: relative;
   margin-bottom: 20px;
 }
-
 .search-bar input {
   width: 100%;
-  padding: 12px 40px;
+  padding: 12px;
   border: 1px solid #e5e7eb;
   border-radius: 10px;
   font-size: 14px;
   outline: none;
-  transition: border 0.3s ease;
 }
-
 .search-bar input:focus {
-  border: 1px solid #3b82f6;
+  border-color: #3b82f6;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
 }
 
-.search-bar .search-icon {
-  position: absolute;
-  top: 50%;
-  left: 12px;
-  transform: translateY(-50%);
-  color: #9ca3af;
-}
-
 /* Meeting List */
-.meeting-list {
+.clientmeeting-list {
   display: flex;
   flex-direction: column;
   gap: 18px;
 }
-
-.meeting-card {
+.clientmeeting-card {
   background: white;
   border: 1px solid #e5e7eb;
   border-radius: 12px;
@@ -88,20 +70,17 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   transition: transform 0.2s ease;
 }
-
-.meeting-card:hover {
+.clientmeeting-card:hover {
   transform: translateY(-2px);
 }
 
-/* Meeting Header */
-.meeting-header {
+.clientmeeting-header-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
 }
-
-.meeting-header h3 {
+.clientmeeting-header-top h3 {
   margin: 0;
   font-size: 18px;
   font-weight: 600;
@@ -113,106 +92,116 @@
   font-size: 12px;
   font-weight: 500;
 }
-
 .status.scheduled {
   background: #e0e7ff;
   color: #3b82f6;
 }
-
 .status.confirmed {
   background: #d1fae5;
   color: #059669;
 }
-
 .status.completed {
   background: #fef3c7;
   color: #b45309;
 }
 
-/* Meeting Details */
-.meeting-details p {
+.clientmeeting-details p {
   margin: 6px 0;
   font-size: 14px;
+  display: flex;
+  align-items: center;
 }
-
-.meeting-details .icon {
+.clientmeeting-details .icon-img {
+  width: 16px;
+  height: 16px;
   margin-right: 6px;
-  color: #6b7280;
-}
-
-.notes {
-  color: #6b7280;
-  font-size: 13px;
 }
 
 /* Actions */
-.meeting-actions {
+.clientmeeting-actions {
   margin-top: 12px;
   display: flex;
   gap: 10px;
 }
-
-.edit-btn,
-.complete-btn {
-  padding: 8px 14px;
-  border-radius: 8px;
-  font-size: 13px;
-  cursor: pointer;
-  border: none;
-  transition: background 0.3s ease;
-}
-
 .edit-btn {
   background: #f3f4f6;
   color: #374151;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease;
 }
-
 .edit-btn:hover {
   background: #e5e7eb;
 }
-
 .complete-btn {
   background: #3b82f6;
   color: white;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease;
 }
-
 .complete-btn:hover {
   background: #2563eb;
 }
 
-/* Meeting Form */
-.meeting-form {
-  background: #f9fafb;
-  padding: 20px;
-  border: 1px solid #e5e7eb;
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+.modal-content {
+  background: white;
+  padding: 25px;
   border-radius: 12px;
-  margin-bottom: 20px;
+  width: 400px;
   display: flex;
   flex-direction: column;
   gap: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
 }
-
-.meeting-form input,
-.meeting-form textarea {
+.modal-content h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+.modal-content input,
+.modal-content select,
+.modal-content textarea {
   padding: 10px 12px;
   border: 1px solid #d1d5db;
   border-radius: 8px;
   font-size: 14px;
-  outline: none;
-  transition: border 0.3s ease, box-shadow 0.3s ease;
 }
-
-.meeting-form input:focus,
-.meeting-form textarea:focus {
-  border: 1px solid #3b82f6;
+.modal-content input:focus,
+.modal-content select:focus,
+.modal-content textarea:focus {
+  border-color: #3b82f6;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
 }
-
-.meeting-form textarea {
-  resize: vertical;
+.modal-content textarea {
   min-height: 70px;
+  resize: vertical;
 }
 
+.form-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
 .submit-btn {
   background: #3b82f6;
   color: white;
@@ -221,10 +210,18 @@
   border-radius: 8px;
   cursor: pointer;
   font-weight: 500;
-  align-self: flex-start;
-  transition: background 0.3s ease;
 }
-
 .submit-btn:hover {
   background: #2563eb;
+}
+.cancel-btn {
+  background: #f3f4f6;
+  color: #374151;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.cancel-btn:hover {
+  background: #e5e7eb;
 }
