@@ -1,51 +1,76 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./StockAlerts.css";
+import { getAlerts, addAlert, updateAlert, deleteAlert } from "../api/stockAlerts";
 
 const StockAlerts = () => {
-  const [alerts, setAlerts] = useState([
-    { id: 1, product: "Steel Rods", currentStock: 8, threshold: 10, alertLevel: "Low" },
-    { id: 2, product: "Plastic Sheets", currentStock: 3, threshold: 5, alertLevel: "Critical" },
-    { id: 3, product: "Copper Wire", currentStock: 12, threshold: 15, alertLevel: "Low" },
-  ]);
-
+  const [alerts, setAlerts] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [editingAlert, setEditingAlert] = useState(null);
   const [formData, setFormData] = useState({
     product: "",
-    currentStock: "",
+    current_stock: "",
     threshold: "",
-    alertLevel: "Low",
+    alert_level: "Low",
   });
+
+  // Fetch alerts from backend
+  const fetchAlerts = async () => {
+    try {
+      const data = await getAlerts();
+      setAlerts(data);
+    } catch (err) {
+      console.error("Error fetching alerts:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchAlerts();
+  }, []);
 
   // Handle input change
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Add or Update alert
-  const handleSubmit = (e) => {
+  // Add or update alert
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (editingAlert) {
-      setAlerts(alerts.map((a) => (a.id === editingAlert.id ? { ...formData, id: editingAlert.id } : a)));
-    } else {
-      setAlerts([...alerts, { ...formData, id: Date.now() }]);
+    try {
+      if (editingAlert) {
+        await updateAlert(editingAlert.alert_id, formData);
+      } else {
+        await addAlert(formData);
+      }
+      setShowForm(false);
+      setEditingAlert(null);
+      setFormData({ product: "", current_stock: "", threshold: "", alert_level: "Low" });
+      fetchAlerts();
+    } catch (err) {
+      console.error("Error saving alert:", err);
     }
-    setFormData({ product: "", currentStock: "", threshold: "", alertLevel: "Low" });
-    setEditingAlert(null);
-    setShowForm(false);
   };
 
   // Edit alert
   const handleEdit = (alert) => {
     setEditingAlert(alert);
-    setFormData(alert);
+    setFormData({
+      product: alert.product,
+      current_stock: alert.current_stock,
+      threshold: alert.threshold,
+      alert_level: alert.alert_level,
+    });
     setShowForm(true);
   };
 
   // Delete alert
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to remove this alert?")) {
-      setAlerts(alerts.filter((a) => a.id !== id));
+      try {
+        await deleteAlert(id);
+        fetchAlerts();
+      } catch (err) {
+        console.error("Error deleting alert:", err);
+      }
     }
   };
 
@@ -69,9 +94,9 @@ const StockAlerts = () => {
           />
           <input
             type="number"
-            name="currentStock"
+            name="current_stock"
             placeholder="Current Stock"
-            value={formData.currentStock}
+            value={formData.current_stock}
             onChange={handleChange}
             required
           />
@@ -83,7 +108,7 @@ const StockAlerts = () => {
             onChange={handleChange}
             required
           />
-          <select name="alertLevel" value={formData.alertLevel} onChange={handleChange}>
+          <select name="alert_level" value={formData.alert_level} onChange={handleChange}>
             <option value="Low">Low</option>
             <option value="Critical">Critical</option>
           </select>
@@ -109,14 +134,14 @@ const StockAlerts = () => {
           </thead>
           <tbody>
             {alerts.map((alert) => (
-              <tr key={alert.id}>
+              <tr key={alert.alert_id}>
                 <td>{alert.product}</td>
-                <td>{alert.currentStock}</td>
+                <td>{alert.current_stock}</td>
                 <td>{alert.threshold}</td>
-                <td className={alert.alertLevel.toLowerCase()}>{alert.alertLevel}</td>
+                <td className={alert.alert_level.toLowerCase()}>{alert.alert_level}</td>
                 <td>
                   <button className="btn-edit" onClick={() => handleEdit(alert)}>Edit</button>
-                  <button className="btn-delete" onClick={() => handleDelete(alert.id)}>Delete</button>
+                  <button className="btn-delete" onClick={() => handleDelete(alert.alert_id)}>Delete</button>
                 </td>
               </tr>
             ))}
