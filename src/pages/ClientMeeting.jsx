@@ -1,28 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./ClientMeeting.css";
+import {
+  getClientMeetings,
+  addClientMeeting,
+  updateClientMeeting,
+  deleteClientMeeting,
+} from "../api/clientmeeting";
 
 const ClientMeeting = () => {
-  const [meetings, setMeetings] = useState([
-    {
-      id: 1,
-      client: "Mrs. Priya Sharma",
-      purpose: "Ring Selection",
-      date: "2025-09-10",
-      time: "2:00 PM",
-      status: "Scheduled",
-      notes: "Discuss diamond options",
-    },
-    {
-      id: 2,
-      client: "Mr. John Doe",
-      purpose: "Workshop Visit",
-      date: "2025-09-11",
-      time: "11:00 AM",
-      status: "Confirmed",
-      notes: "Inspect gold chain polishing",
-    },
-  ]);
-
+  const [meetings, setMeetings] = useState([]);
   const [formVisible, setFormVisible] = useState(false);
   const [editingMeeting, setEditingMeeting] = useState(null);
   const [formData, setFormData] = useState({
@@ -34,22 +20,61 @@ const ClientMeeting = () => {
     notes: "",
   });
 
+  useEffect(() => {
+    fetchMeetings();
+  }, []);
+
+  const fetchMeetings = async () => {
+    try {
+      const { data } = await getClientMeetings();
+      setMeetings(data);
+    } catch (error) {
+      console.error("Error fetching meetings:", error);
+    }
+  };
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSave = () => {
+ const handleSave = async () => {
+  try {
+    const formattedData = {
+      ...formData,
+      date: formData.date.split("T")[0], // ensure only YYYY-MM-DD
+    };
+
     if (editingMeeting) {
-      setMeetings(
-        meetings.map((m) =>
-          m.id === editingMeeting.id ? { ...m, ...formData } : m
-        )
-      );
+      await updateClientMeeting(editingMeeting.meeting_id, formattedData);
     } else {
-      setMeetings([...meetings, { ...formData, id: Date.now() }]);
+      await addClientMeeting(formattedData);
     }
-    setFormVisible(false);
-    setEditingMeeting(null);
+    fetchMeetings();
+    resetForm();
+  } catch (error) {
+    console.error("Error saving meeting:", error);
+  }
+};
+
+
+  const handleEdit = (meeting) => {
+    setEditingMeeting(meeting);
+    setFormData(meeting);
+    setFormVisible(true);
+  };
+
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this meeting?")) {
+      try {
+        await deleteClientMeeting(id);
+        fetchMeetings();
+      } catch (error) {
+        console.error("Error deleting meeting:", error);
+      }
+    }
+  };
+
+  const resetForm = () => {
     setFormData({
       client: "",
       purpose: "",
@@ -58,18 +83,8 @@ const ClientMeeting = () => {
       status: "Scheduled",
       notes: "",
     });
-  };
-
-  const handleEdit = (meeting) => {
-    setEditingMeeting(meeting);
-    setFormData(meeting);
-    setFormVisible(true);
-  };
-
-  const handleDelete = (id) => {
-    if (window.confirm("Are you sure you want to delete this meeting?")) {
-      setMeetings(meetings.filter((m) => m.id !== id));
-    }
+    setFormVisible(false);
+    setEditingMeeting(null);
   };
 
   return (
@@ -90,7 +105,7 @@ const ClientMeeting = () => {
 
       <div className="clientmeeting-list">
         {meetings.map((m) => (
-          <div className="clientmeeting-card" key={m.id}>
+          <div className="clientmeeting-card" key={m.meeting_id}>
             <div className="clientmeeting-header-top">
               <h3>{m.client}</h3>
               <span className={`status ${m.status.toLowerCase()}`}>
@@ -109,7 +124,7 @@ const ClientMeeting = () => {
               </button>
               <button
                 className="complete-btn"
-                onClick={() => handleDelete(m.id)}
+                onClick={() => handleDelete(m.meeting_id)}
               >
                 Delete
               </button>
@@ -118,9 +133,8 @@ const ClientMeeting = () => {
         ))}
       </div>
 
-      {/* Modal Form */}
       {formVisible && (
-        <div className="modal-overlay" onClick={() => setFormVisible(false)}>
+        <div className="modal-overlay" onClick={resetForm}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <h3>{editingMeeting ? "Edit Meeting" : "Add New Meeting"}</h3>
             <input
@@ -173,13 +187,7 @@ const ClientMeeting = () => {
               <button className="submit-btn" onClick={handleSave}>
                 {editingMeeting ? "Update" : "Save"}
               </button>
-              <button
-                className="cancel-btn"
-                onClick={() => {
-                  setFormVisible(false);
-                  setEditingMeeting(null);
-                }}
-              >
+              <button className="cancel-btn" onClick={resetForm}>
                 Cancel
               </button>
             </div>

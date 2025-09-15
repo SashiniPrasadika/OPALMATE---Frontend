@@ -1,40 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./RawMaterials.css";
+import {
+  getRawMaterials,
+  addRawMaterial,
+  updateRawMaterial,
+  deleteRawMaterial,
+} from "../api/rawmaterials";
 
 const RawMaterials = () => {
-  const [materials, setMaterials] = useState([
-    {
-      id: 1,
-      name: "24K Gold",
-      category: "Precious Metal",
-      quantity: "125.5 grams",
-      supplier: "Gold Supplier Ltd",
-      cost: 4500,
-      status: "In Stock",
-      lastUpdated: "1/15/2024",
-    },
-    {
-      id: 2,
-      name: "Diamonds - Round Cut",
-      category: "Gemstone",
-      quantity: "25 pieces",
-      supplier: "Diamond House",
-      cost: 85000,
-      status: "In Stock",
-      lastUpdated: "1/14/2024",
-    },
-    {
-      id: 3,
-      name: "Silver Wire",
-      category: "Metal",
-      quantity: "8 meters",
-      supplier: "Metal Works",
-      cost: 350,
-      status: "Low Stock",
-      lastUpdated: "1/12/2024",
-    },
-  ]);
-
+  const [materials, setMaterials] = useState([]);
   const [search, setSearch] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [editingMaterial, setEditingMaterial] = useState(null);
@@ -47,7 +21,19 @@ const RawMaterials = () => {
     status: "In Stock",
   });
 
-  // ✅ Open Add/Edit Form
+  useEffect(() => {
+    fetchMaterials();
+  }, []);
+
+  const fetchMaterials = async () => {
+    try {
+      const { data } = await getRawMaterials();
+      setMaterials(data);
+    } catch (err) {
+      console.error("Error fetching materials:", err);
+    }
+  };
+
   const openForm = (material = null) => {
     if (material) {
       setEditingMaterial(material);
@@ -70,28 +56,32 @@ const RawMaterials = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSave = () => {
-    if (editingMaterial) {
-      setMaterials(
-        materials.map((mat) =>
-          mat.id === editingMaterial.id ? { ...formData, id: mat.id } : mat
-        )
-      );
-    } else {
-      setMaterials([
-        ...materials,
-        { ...formData, id: Date.now(), lastUpdated: new Date().toLocaleDateString() },
-      ]);
+  const handleSave = async () => {
+    try {
+      if (editingMaterial) {
+        await updateRawMaterial(editingMaterial.material_id, formData);
+      } else {
+        await addRawMaterial(formData);
+      }
+      fetchMaterials();
+      setShowForm(false);
+      setEditingMaterial(null);
+    } catch (err) {
+      console.error("Error saving material:", err);
     }
-    setShowForm(false);
   };
 
-  // ✅ Simulate Reorder
-  const handleReorder = (id) => {
-    alert("Reorder request placed for material ID: " + id);
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this material?")) {
+      try {
+        await deleteRawMaterial(id);
+        fetchMaterials();
+      } catch (err) {
+        console.error("Error deleting material:", err);
+      }
+    }
   };
 
-  // ✅ Filtered List
   const filteredMaterials = materials.filter((mat) =>
     mat.name.toLowerCase().includes(search.toLowerCase())
   );
@@ -104,7 +94,6 @@ const RawMaterials = () => {
         <button className="add-btn" onClick={() => openForm()}>+ Add Material</button>
       </div>
 
-      {/* Search */}
       <div className="search-box">
         <input
           type="text"
@@ -114,10 +103,9 @@ const RawMaterials = () => {
         />
       </div>
 
-      {/* List */}
       <div className="materials-list">
         {filteredMaterials.map((mat) => (
-          <div className="material-card" key={mat.id}>
+          <div className="material-card" key={mat.material_id}>
             <div className="material-info">
               <h3>{mat.name}</h3>
               <span className={`status ${mat.status === "In Stock" ? "in-stock" : "low-stock"}`}>
@@ -127,56 +115,25 @@ const RawMaterials = () => {
               <p><strong>Quantity:</strong> {mat.quantity}</p>
               <p><strong>Supplier:</strong> {mat.supplier}</p>
               <p><strong>Cost per unit:</strong> ₹{mat.cost}</p>
-              <small>Last updated: {mat.lastUpdated}</small>
+              <small>Last updated: {mat.last_updated}</small>
             </div>
             <div className="material-actions">
               <button onClick={() => openForm(mat)}>Edit</button>
-              <button onClick={() => handleReorder(mat.id)}>Reorder</button>
+              <button onClick={() => handleDelete(mat.material_id)}>Delete</button>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Add/Edit Modal */}
       {showForm && (
         <div className="modal">
           <div className="modal-content">
             <h3>{editingMaterial ? "Edit Material" : "Add Material"}</h3>
-            <input
-              type="text"
-              name="name"
-              placeholder="Material Name"
-              value={formData.name}
-              onChange={handleChange}
-            />
-            <input
-              type="text"
-              name="category"
-              placeholder="Category"
-              value={formData.category}
-              onChange={handleChange}
-            />
-            <input
-              type="text"
-              name="quantity"
-              placeholder="Quantity"
-              value={formData.quantity}
-              onChange={handleChange}
-            />
-            <input
-              type="text"
-              name="supplier"
-              placeholder="Supplier"
-              value={formData.supplier}
-              onChange={handleChange}
-            />
-            <input
-              type="number"
-              name="cost"
-              placeholder="Cost per unit"
-              value={formData.cost}
-              onChange={handleChange}
-            />
+            <input type="text" name="name" placeholder="Material Name" value={formData.name} onChange={handleChange} />
+            <input type="text" name="category" placeholder="Category" value={formData.category} onChange={handleChange} />
+            <input type="text" name="quantity" placeholder="Quantity" value={formData.quantity} onChange={handleChange} />
+            <input type="text" name="supplier" placeholder="Supplier" value={formData.supplier} onChange={handleChange} />
+            <input type="number" name="cost" placeholder="Cost per unit" value={formData.cost} onChange={handleChange} />
             <select name="status" value={formData.status} onChange={handleChange}>
               <option value="In Stock">In Stock</option>
               <option value="Low Stock">Low Stock</option>
