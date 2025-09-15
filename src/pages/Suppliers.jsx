@@ -1,79 +1,134 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Suppliers.css";
-import supplierIcon from "../assets/supplier.png";
-import phoneIcon from "../assets/phone-call.png";
-import locationIcon from "../assets/location.png";
-import starIcon from "../assets/star.png";
-import plusIcon from "../assets/plus.png"; // optional, for Add button
-import editIcon from "../assets/edit.png"; // optional, for Edit button
+import { getSuppliers, addSupplier, updateSupplier, deleteSupplier } from "../api/suppliers";
 
 const Suppliers = () => {
-  const [suppliers, setSuppliers] = useState([
-    {
-      id: 1,
-      name: "Gold Supplier Ltd",
-      category: "Precious Metals",
-      status: "Active",
-      contactPerson: "Mr. Suresh Kumar",
-      email: "suresh@goldsupplier.com",
-      phone: "+91-9876543210",
-      location: "Mumbai, Maharashtra",
-      rating: 4.8,
-    },
-    {
-      id: 2,
-      name: "Diamond House",
-      category: "Gemstones",
-      status: "Active",
-      contactPerson: "Ms. Kavita Shah",
-      email: "kavita@diamondhouse.com",
-      phone: "+91-9876543211",
-      location: "Surat, Gujarat",
-      rating: 4.9,
-    },
-  ]);
-
+  const [suppliers, setSuppliers] = useState([]);
   const [search, setSearch] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [editSupplier, setEditSupplier] = useState(null);
+  const [formData, setFormData] = useState({
+    name: "",
+    category: "",
+    status: "Active",
+    contactPerson: "",
+    email: "",
+    phone: "",
+    location: "",
+    rating: "",
+  });
 
+  // Fetch suppliers from backend
+  const fetchSuppliers = async () => {
+    try {
+      const { data } = await getSuppliers();
+      setSuppliers(data);
+    } catch (err) {
+      console.error("Failed to fetch suppliers:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchSuppliers();
+  }, []);
+
+  // Handle form input change
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  // Open Add form
   const handleAddSupplier = () => {
     setEditSupplier(null);
+    setFormData({
+      name: "",
+      category: "",
+      status: "Active",
+      contactPerson: "",
+      email: "",
+      phone: "",
+      location: "",
+      rating: "",
+    });
     setShowForm(true);
   };
 
+  // Open Edit form
   const handleEdit = (supplier) => {
     setEditSupplier(supplier);
+    setFormData({
+      name: supplier.supplier_name,
+      category: supplier.category,
+      status: supplier.status,
+      contactPerson: supplier.contact_person,
+      email: supplier.email,
+      phone: supplier.phone,
+      location: supplier.location,
+      rating: supplier.rating,
+    });
     setShowForm(true);
   };
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    const form = new FormData(e.target);
-    const newSupplier = {
-      id: editSupplier ? editSupplier.id : suppliers.length + 1,
-      name: form.get("name"),
-      category: form.get("category"),
-      status: form.get("status"),
-      contactPerson: form.get("contactPerson"),
-      email: form.get("email"),
-      phone: form.get("phone"),
-      location: form.get("location"),
-      rating: parseFloat(form.get("rating")),
-    };
-
-    if (editSupplier) {
-      setSuppliers(
-        suppliers.map((s) => (s.id === editSupplier.id ? newSupplier : s))
-      );
-    } else {
-      setSuppliers([...suppliers, newSupplier]);
+  // Delete supplier
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this supplier?")) {
+      try {
+        await deleteSupplier(id);
+        fetchSuppliers();
+      } catch (err) {
+        console.error("Failed to delete supplier:", err);
+      }
     }
-    setShowForm(false);
   };
 
+  // View supplier details
+  const handleView = (supplier) => {
+    alert(`
+Name: ${supplier.supplier_name}
+Category: ${supplier.category}
+Status: ${supplier.status}
+Contact Person: ${supplier.contact_person}
+Email: ${supplier.email}
+Phone: ${supplier.phone}
+Location: ${supplier.location}
+Rating: ${supplier.rating}/5.0
+    `);
+  };
+
+  // Handle form submit
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const supplierPayload = {
+        supplier_name: formData.name,
+        category: formData.category,
+        status: formData.status,
+        contact_person: formData.contactPerson,
+        email: formData.email,
+        phone: formData.phone,
+        location: formData.location,
+        rating: parseFloat(formData.rating),
+      };
+
+      if (editSupplier) {
+        await updateSupplier(editSupplier.supplier_id, supplierPayload);
+      } else {
+        await addSupplier(supplierPayload);
+      }
+
+      // Refresh list
+      fetchSuppliers();
+      setShowForm(false);
+      setEditSupplier(null);
+    } catch (err) {
+      console.error("Error saving supplier:", err);
+      alert("Failed to save supplier. Check console for details.");
+    }
+  };
+
+  // Filter suppliers by search
   const filteredSuppliers = suppliers.filter((s) =>
-    s.name.toLowerCase().includes(search.toLowerCase())
+    s.supplier_name.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -82,7 +137,7 @@ const Suppliers = () => {
         <h1>Suppliers</h1>
         <p>Manage your supplier relationships</p>
         <button className="add-btn" onClick={handleAddSupplier}>
-          <img src={plusIcon} alt="Add" className="button-icon" /> Add Supplier
+          Add Supplier
         </button>
       </div>
 
@@ -96,44 +151,47 @@ const Suppliers = () => {
         />
       </div>
 
-      {/* Supplier List */}
+      {/* Supplier Cards */}
       <div className="suppliers-list">
         {filteredSuppliers.map((supplier) => (
-          <div className="supplier-card" key={supplier.id}>
-            <div className="supplier-info">
-              <img src={supplierIcon} alt="supplier" className="supplier-logo" />
-              <div className="supplier-details">
-                <h2>{supplier.name}</h2>
-                <span className="status">{supplier.status}</span>
-                <span className="category">{supplier.category}</span>
-                <p>
-                  Contact Person: <strong>{supplier.contactPerson}</strong>
-                </p>
-                <div className="rating">
-                  <img src={starIcon} alt="star" className="icon" />{" "}
-                  <strong>{supplier.rating}/5.0</strong>
-                </div>
-                <div className="contact">
-                  <p>
-                    <img src={phoneIcon} alt="phone" className="icon" /> {supplier.phone}
-                  </p>
-                  <p>
-                    <img src={locationIcon} alt="location" className="icon" /> {supplier.location}
-                  </p>
-                  <p>Email: {supplier.email}</p>
-                </div>
-              </div>
+          <div className="supplier-card" key={supplier.supplier_id}>
+            <div className="supplier-details">
+              <h2>
+                {supplier.supplier_name}{" "}
+                <span className={`status ${supplier.status.toLowerCase()}`}>
+                  {supplier.status}
+                </span>
+              </h2>
+              <span className="category">{supplier.category}</span>
+              <p>
+                Contact Person: <strong>{supplier.contact_person}</strong>
+              </p>
+              <p>Email: {supplier.email}</p>
+              <p>Phone: {supplier.phone}</p>
+              <p>Location: {supplier.location}</p>
+              <p>
+                Rating: <strong>{supplier.rating}/5.0</strong>
+              </p>
             </div>
             <div className="supplier-actions">
               <button className="edit-btn" onClick={() => handleEdit(supplier)}>
-                <img src={editIcon} alt="Edit" className="button-icon" /> Edit
+                Edit
+              </button>
+              <button
+                className="delete-btn"
+                onClick={() => handleDelete(supplier.supplier_id)}
+              >
+                Delete
+              </button>
+              <button className="view-btn" onClick={() => handleView(supplier)}>
+                View
               </button>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Add/Edit Form Modal */}
+      {/* Form Modal */}
       {showForm && (
         <div className="modal">
           <div className="modal-content">
@@ -142,44 +200,51 @@ const Suppliers = () => {
               <input
                 name="name"
                 placeholder="Supplier Name"
-                defaultValue={editSupplier?.name || ""}
+                value={formData.name}
+                onChange={handleChange}
                 required
               />
               <input
                 name="category"
                 placeholder="Category"
-                defaultValue={editSupplier?.category || ""}
+                value={formData.category}
+                onChange={handleChange}
                 required
               />
               <input
                 name="status"
                 placeholder="Status"
-                defaultValue={editSupplier?.status || ""}
+                value={formData.status}
+                onChange={handleChange}
                 required
               />
               <input
                 name="contactPerson"
                 placeholder="Contact Person"
-                defaultValue={editSupplier?.contactPerson || ""}
+                value={formData.contactPerson}
+                onChange={handleChange}
                 required
               />
               <input
                 name="email"
                 type="email"
                 placeholder="Email"
-                defaultValue={editSupplier?.email || ""}
+                value={formData.email}
+                onChange={handleChange}
                 required
               />
               <input
                 name="phone"
                 placeholder="Phone"
-                defaultValue={editSupplier?.phone || ""}
+                value={formData.phone}
+                onChange={handleChange}
                 required
               />
               <input
                 name="location"
                 placeholder="Location"
-                defaultValue={editSupplier?.location || ""}
+                value={formData.location}
+                onChange={handleChange}
                 required
               />
               <input
@@ -187,12 +252,19 @@ const Suppliers = () => {
                 type="number"
                 step="0.1"
                 placeholder="Rating"
-                defaultValue={editSupplier?.rating || ""}
+                value={formData.rating}
+                onChange={handleChange}
                 required
               />
               <div className="form-actions">
-                <button type="submit">{editSupplier ? "Update" : "Add"}</button>
-                <button type="button" onClick={() => setShowForm(false)}>
+                <button type="submit" className="save-btn">
+                  {editSupplier ? "Update" : "Add"}
+                </button>
+                <button
+                  type="button"
+                  className="cancel-btn"
+                  onClick={() => setShowForm(false)}
+                >
                   Cancel
                 </button>
               </div>
@@ -205,3 +277,4 @@ const Suppliers = () => {
 };
 
 export default Suppliers;
+

@@ -1,43 +1,15 @@
-import React, { useState } from "react";
+// src/components/Employees.jsx
+import React, { useEffect, useState } from "react";
 import "./Employees.css";
-import employeeIcon from "../assets/employees.png";
-import envelopeIcon from "../assets/envelope.png";
-import phoneIcon from "../assets/phone-call.png";
+import {
+  getEmployees,
+  addEmployee,
+  updateEmployee,
+  deleteEmployee,
+} from "../api/employees";
 
 const Employees = () => {
-  const [employees, setEmployees] = useState([
-    {
-      id: 1,
-      name: "Rajesh Kumar",
-      role: "Senior Craftsman",
-      department: "Production",
-      email: "rajesh@ishara.com",
-      phone: "+91-9876543210",
-      status: "Active",
-      joined: "2020-03-15",
-    },
-    {
-      id: 2,
-      name: "Priya Sharma",
-      role: "Sales Manager",
-      department: "Sales",
-      email: "priya@ishara.com",
-      phone: "+91-9876543211",
-      status: "Active",
-      joined: "2019-07-22",
-    },
-    {
-      id: 3,
-      name: "Amit Patel",
-      role: "Accountant",
-      department: "Finance",
-      email: "amit@ishara.com",
-      phone: "+91-9876543212",
-      status: "Active",
-      joined: "2021-01-12",
-    },
-  ]);
-
+  const [employees, setEmployees] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [editingEmployee, setEditingEmployee] = useState(null);
   const [formData, setFormData] = useState({
@@ -46,26 +18,35 @@ const Employees = () => {
     department: "",
     email: "",
     phone: "",
-    status: "Active",
-    joined: "",
+    joining_date: "",
+    is_active: 1, // numeric 1 = active, 0 = inactive
   });
 
-  // Handle input change
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  useEffect(() => {
+    fetchEmployees();
+  }, []);
+
+  const fetchEmployees = async () => {
+    try {
+      const res = await getEmployees();
+      // assume res.data is an array of employees with fields like employee_id, joining_date, is_active
+      setEmployees(Array.isArray(res.data) ? res.data : []);
+    } catch (err) {
+      console.error("Error fetching employees:", err);
+    }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (editingEmployee) {
-      setEmployees(
-        employees.map((emp) =>
-          emp.id === editingEmployee.id ? { ...editingEmployee, ...formData } : emp
-        )
-      );
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    // ensure is_active is numeric
+    if (name === "is_active") {
+      setFormData((p) => ({ ...p, [name]: Number(value) }));
     } else {
-      setEmployees([...employees, { id: Date.now(), ...formData }]);
+      setFormData((p) => ({ ...p, [name]: value }));
     }
+  };
+
+  const resetForm = () => {
     setShowForm(false);
     setEditingEmployee(null);
     setFormData({
@@ -74,68 +55,144 @@ const Employees = () => {
       department: "",
       email: "",
       phone: "",
-      status: "Active",
-      joined: "",
+      joining_date: "",
+      is_active: 1,
     });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      // debug log - always good to inspect what we're sending
+      const idToUse = editingEmployee
+        ? editingEmployee.employee_id ?? editingEmployee.id
+        : null;
+      console.log("Submitting employee:", { id: idToUse, payload: formData });
+
+      if (editingEmployee) {
+        if (!idToUse) {
+          console.error("No valid employee id when updating:", editingEmployee);
+          return;
+        }
+        await updateEmployee(idToUse, formData);
+      } else {
+        await addEmployee(formData);
+      }
+
+      await fetchEmployees();
+      resetForm();
+    } catch (err) {
+      console.error("Error saving employee:", err);
+    }
   };
 
   const handleEdit = (employee) => {
     setEditingEmployee(employee);
-    setFormData(employee);
+    setFormData({
+      name: employee.name ?? "",
+      role: employee.role ?? "",
+      department: employee.department ?? "",
+      email: employee.email ?? "",
+      phone: employee.phone ?? "",
+      joining_date: employee.joining_date ?? employee.joined ?? "",
+      // if backend returns is_active as 1/0 use that; if frontend used "status", convert:
+      is_active:
+        typeof employee.is_active !== "undefined"
+          ? Number(employee.is_active)
+          : employee.status === "Active"
+          ? 1
+          : 0,
+    });
     setShowForm(true);
   };
 
   const handleView = (employee) => {
-    alert(`
-      Name: ${employee.name}
-      Role: ${employee.role}
-      Department: ${employee.department}
-      Email: ${employee.email}
-      Phone: ${employee.phone}
-      Status: ${employee.status}
-      Joined: ${employee.joined}
-    `);
+    alert(
+      `Name: ${employee.name}\nRole: ${employee.role}\nDepartment: ${employee.department}\nEmail: ${employee.email}\nPhone: ${employee.phone}\nJoined: ${employee.joining_date ?? employee.joined}\nActive: ${
+        employee.is_active ? "Yes" : "No"
+      }`
+    );
+  };
+
+  const handleDelete = async (employee) => {
+    // accept either id number or employee object
+    const idToUse =
+      typeof employee === "number" ? employee : employee.employee_id ?? employee.id;
+
+    if (!idToUse) {
+      console.error("No valid id to delete:", employee);
+      return;
+    }
+
+    if (window.confirm("Are you sure you want to delete this employee?")) {
+      try {
+        await deleteEmployee(idToUse);
+        fetchEmployees();
+      } catch (err) {
+        console.error("Error deleting employee:", err);
+      }
+    }
   };
 
   return (
     <div className="employees-container">
       <div className="employees-header">
-        <h2>Employees</h2>
-        <p>Manage your team members and staff</p>
-        <button className="add-btn" onClick={() => setShowForm(true)}>+ Add Employee</button>
+        <div className="header-text">
+          <h2>Employees</h2>
+          <p className="description">Manage your team members and staff</p>
+        </div>
       </div>
 
-      {/* Search bar */}
+      <button className="add-btn" onClick={() => setShowForm(true)}>
+        + Add Employee
+      </button>
+
       <input type="text" className="search-bar" placeholder="Search employees..." />
 
-      {/* Employee List */}
       <div className="employee-list">
-        {employees.map((employee) => (
-          <div className="employee-card" key={employee.id}>
-            <div className="employee-info">
-              <img src={employeeIcon} alt="employee" className="employee-avatar" />
-              <div>
-                <h3>
-                  {employee.name} <span className="status">{employee.status}</span>
-                </h3>
-                <p>Role: {employee.role}</p>
-                <p>Department: {employee.department}</p>
-                <p>
-                  <img src={envelopeIcon} alt="email" className="icon" /> {employee.email} |
-                  <img src={phoneIcon} alt="phone" className="icon" /> {employee.phone}
-                </p>
-                <p>Joined: {employee.joined}</p>
+        {employees.length === 0 ? (
+          <p>No employees found.</p>
+        ) : (
+          employees.map((employee) => {
+            const key = employee.employee_id ?? employee.id;
+            return (
+              <div className="employee-card" key={key}>
+                <div className="employee-info">
+                  <h3>
+                    {employee.name}{" "}
+                    <span className={`status ${employee.is_active ? "active" : "inactive"}`}>
+                      {employee.is_active ? "Active" : "Inactive"}
+                    </span>
+                  </h3>
+                  <p>Role: {employee.role}</p>
+                  <p>Department: {employee.department}</p>
+                  <p>
+                    Email: {employee.email} | Phone: {employee.phone}
+                  </p>
+                  <p>Joined: {employee.joining_date ?? employee.joined}</p>
+                </div>
+
+                <div className="employee-actions">
+                  <button className="edit-btn" onClick={() => handleEdit(employee)}>
+                    Edit
+                  </button>
+                  <button className="view-btn" onClick={() => handleView(employee)}>
+                    View
+                  </button>
+                  <button
+                    className="delete-btn"
+                    onClick={() => handleDelete(employee)}
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
-            </div>
-            <div className="employee-actions">
-              <button onClick={() => handleEdit(employee)}>Edit</button>
-              <button onClick={() => handleView(employee)}>View</button>
-            </div>
-          </div>
-        ))}
+            );
+          })
+        )}
       </div>
 
-      {/* Add/Edit Form */}
       {showForm && (
         <div className="form-popup">
           <form onSubmit={handleSubmit} className="employee-form">
@@ -145,14 +202,19 @@ const Employees = () => {
             <input name="department" placeholder="Department" value={formData.department} onChange={handleChange} required />
             <input name="email" placeholder="Email" value={formData.email} onChange={handleChange} required />
             <input name="phone" placeholder="Phone" value={formData.phone} onChange={handleChange} required />
-            <input name="joined" type="date" value={formData.joined} onChange={handleChange} required />
-            <select name="status" value={formData.status} onChange={handleChange}>
-              <option value="Active">Active</option>
-              <option value="Inactive">Inactive</option>
+            <input name="joining_date" type="date" value={formData.joining_date} onChange={handleChange} required />
+            <select name="is_active" value={formData.is_active} onChange={handleChange}>
+              <option value={1}>Active</option>
+              <option value={0}>Inactive</option>
             </select>
+
             <div className="form-actions">
-              <button type="submit">{editingEmployee ? "Update" : "Add"}</button>
-              <button type="button" onClick={() => setShowForm(false)}>Cancel</button>
+              <button type="submit" className="save-btn">
+                {editingEmployee ? "Update" : "Add"}
+              </button>
+              <button type="button" className="cancel-btn" onClick={resetForm}>
+                Cancel
+              </button>
             </div>
           </form>
         </div>

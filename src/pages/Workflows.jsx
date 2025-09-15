@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import "./Workflows.css";
-import editIcon from "../assets/edit.png";
-import deleteIcon from "../assets/delete.png";
 
 const Workflows = () => {
   const [workflows, setWorkflows] = useState([
@@ -91,6 +89,7 @@ const Workflows = () => {
     <div className="workflows-container">
       <div className="header">
         <h1>Workflows</h1>
+        
         <p>Manage jewelry creation and service workflows</p>
         <button className="create-btn" onClick={() => setShowForm(true)}>
           + Create Workflow
@@ -103,42 +102,42 @@ const Workflows = () => {
         className="search-bar"
       />
 
-      {/* Workflow Cards */}
-      {workflows.map((workflow) => (
-        <div className="workflow-card" key={workflow.id}>
-          <div className="workflow-header">
-            <h2>{workflow.title}</h2>
-            <span className="status">{workflow.status}</span>
+      <div className="cards-container">
+        {workflows.map((workflow) => (
+          <div className="workflow-card" key={workflow.id}>
+            <div className="workflow-header">
+              <h2>{workflow.title}</h2>
+              <span className={`status ${workflow.status.toLowerCase()}`}>
+                {workflow.status}
+              </span>
+            </div>
+            <p className="description">{workflow.description}</p>
+            <div className="steps">
+              {workflow.steps.map((step, index) => (
+                <span key={index} className="step">
+                  {step}
+                  {index < workflow.steps.length - 1 && " → "}
+                </span>
+              ))}
+            </div>
+            <div className="actions">
+              <button
+                className="action-btn edit-btn"
+                onClick={() => handleEdit(workflow)}
+              >
+                Edit
+              </button>
+              <button
+                className="action-btn delete-btn"
+                onClick={() => handleDelete(workflow.id)}
+              >
+                Delete
+              </button>
+            </div>
           </div>
-          <p className="description">{workflow.description}</p>
-          <div className="steps">
-            {workflow.steps.map((step, index) => (
-              <React.Fragment key={index}>
-                <span className="step">{step}</span>
-                {index < workflow.steps.length - 1 && (
-                  <span className="arrow">→</span>
-                )}
-              </React.Fragment>
-            ))}
-          </div>
-          <div className="actions">
-            <button
-              className="action-btn"
-              onClick={() => handleEdit(workflow)}
-            >
-              <img src={editIcon} className="icon-btn" alt="Edit" /> Edit
-            </button>
-            <button
-              className="action-btn delete-btn"
-              onClick={() => handleDelete(workflow.id)}
-            >
-              <img src={deleteIcon} className="icon-btn" alt="Delete" /> Delete
-            </button>
-          </div>
-        </div>
-      ))}
+        ))}
+      </div>
 
-      {/* Modal Form */}
       {showForm && (
         <div className="modal-overlay" onClick={() => setShowForm(false)}>
           <div

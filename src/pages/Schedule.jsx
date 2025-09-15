@@ -1,15 +1,16 @@
-import React, { useState } from "react";
-import "./Schedule.css";
-import calendarIcon from "../assets/calendar.png";
-import clockIcon from "../assets/clock.png";
-import plusIcon from "../assets/plus.png";
-import editIcon from "../assets/edit.png";
-import deleteIcon from "../assets/delete.png";
+import React, { useState, useEffect } from "react";
+import "./Employees.css"; // you can reuse your Customers CSS
+import {
+  getEmployees,
+  addEmployee,
+  updateEmployee,
+  deleteEmployee,
+} from "../api/employees";
 
 const Schedule = () => {
   const [events, setEvents] = useState([
-    { id: 1, title: "Mrs. Sharma - Ring Selection", time: "2:00 PM", color: "blue" },
-    { id: 2, title: "Workshop - Polishing", time: "10:00 AM", color: "green" },
+    { id: 1, title: "Mrs. Sharma - Ring Selection", time: "14:00", color: "blue" },
+    { id: 2, title: "Workshop - Polishing", time: "10:00", color: "green" },
   ]);
 
   const [showForm, setShowForm] = useState(false);
@@ -27,6 +28,7 @@ const Schedule = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (editingEvent) {
+      // Update existing event
       setEvents(
         events.map((ev) =>
           ev.id === editingEvent.id ? { ...ev, ...formData } : ev
@@ -34,6 +36,7 @@ const Schedule = () => {
       );
       setEditingEvent(null);
     } else {
+      // Add new event
       const newEvent = { id: Date.now(), ...formData };
       setEvents([...events, newEvent]);
     }
@@ -63,27 +66,22 @@ const Schedule = () => {
           <p>View and manage your calendar</p>
         </div>
         <button className="add-btn" onClick={() => setShowForm(true)}>
-          <img src={plusIcon} className="icon-btn" alt="Add" /> Add Event
+          Add Event
         </button>
       </div>
 
       <div className="schedule-body">
         {/* Calendar placeholder */}
         <div className="calendar-view">
-          <h3>
-            <img src={calendarIcon} className="icon-btn" alt="Calendar" /> Calendar View
-          </h3>
+          <h3>Calendar View</h3>
           <div className="calendar-placeholder">
-            <img src={calendarIcon} className="large-icon" alt="Calendar" />
             <p>Calendar component will be implemented here</p>
           </div>
         </div>
 
         {/* Today's Events */}
         <div className="events-view">
-          <h3>
-            <img src={clockIcon} className="icon-btn" alt="Clock" /> Today's Events
-          </h3>
+          <h3>Today's Events</h3>
           {events.map((event) => (
             <div key={event.id} className="event-card">
               <span className={`dot ${event.color}`}></span>
@@ -92,11 +90,11 @@ const Schedule = () => {
                 <p className="event-time">{event.time}</p>
               </div>
               <div className="event-actions">
-                <button onClick={() => handleEdit(event)}>
-                  <img src={editIcon} className="icon-btn" alt="Edit" />
+                <button className="edit-btn" onClick={() => handleEdit(event)}>
+                  Edit
                 </button>
-                <button onClick={() => handleDelete(event.id)}>
-                  <img src={deleteIcon} className="icon-btn" alt="Delete" />
+                <button className="delete-btn" onClick={() => handleDelete(event.id)}>
+                  Delete
                 </button>
               </div>
             </div>
@@ -117,9 +115,9 @@ const Schedule = () => {
             required
           />
           <input
-            type="text"
+            type="time"
             name="time"
-            placeholder="Event Time (e.g. 2:00 PM)"
+            placeholder="Event Time"
             value={formData.time}
             onChange={handleChange}
             required
@@ -152,4 +150,3 @@ const Schedule = () => {
 };
 
 export default Schedule;
-

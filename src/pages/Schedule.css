@@ -1,214 +1,273 @@
+/* Container */
 .schedule-container {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 30px auto;
   padding: 20px;
-  font-family: 'Poppins', sans-serif;
-  color: #333;
-  position: relative;
+  font-family: "Poppins", sans-serif;
+  color: #2d3748;
 }
 
-/* ---------- Header ---------- */
+/* Header */
 .schedule-header {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
+  gap: 15px;
   margin-bottom: 20px;
 }
 
 .schedule-header h1 {
-  font-size: 26px;
+  font-size: 28px;
   font-weight: 600;
+  margin: 0;
 }
 
 .schedule-header p {
+  color: #6b7280;
   font-size: 14px;
-  color: #666;
 }
 
+/* Add Event Button */
 .add-btn {
-  background: #007bff;
-  color: #fff;
+  background: #3b82f6;
+  color: white;
   border: none;
   padding: 10px 18px;
   border-radius: 8px;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
   cursor: pointer;
-  transition: 0.3s;
+  font-weight: 500;
+  transition: all 0.3s ease;
 }
-
 .add-btn:hover {
-  background: #0066d6;
+  background: #2563eb;
+  transform: translateY(-2px);
 }
 
-.icon-btn {
-  width: 16px;
-  height: 16px;
-}
-
-/* ---------- Body ---------- */
+/* Schedule Body */
 .schedule-body {
   display: flex;
+  flex-wrap: wrap;
   gap: 20px;
 }
 
-.calendar-view,
-.events-view {
-  flex: 1;
-  background: #fff;
-  padding: 20px;
+/* Calendar placeholder */
+.calendar-view {
+  flex: 1 1 400px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
   border-radius: 12px;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+  padding: 20px;
+  min-height: 200px;
 }
 
-.calendar-view h3,
-.events-view h3 {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 15px;
-}
-
-.large-icon {
-  width: 60px;
-  height: 60px;
+.calendar-view h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
 }
 
 .calendar-placeholder {
-  text-align: center;
-  color: #777;
-  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 150px;
+  color: #9ca3af;
+  font-style: italic;
 }
 
-/* ---------- Events ---------- */
+/* Today's Events */
+.events-view {
+  flex: 1 1 400px;
+}
+
+.events-view h3 {
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+/* Event Card */
 .event-card {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #f9fbff;
-  border-radius: 10px;
-  padding: 12px 14px;
-  margin-bottom: 10px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 15px 20px;
+  margin-bottom: 12px;
+  transition: all 0.3s ease;
+}
+
+.event-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
 }
 
 .dot {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
-  margin-right: 10px;
+  margin-right: 12px;
+  flex-shrink: 0;
 }
 
-.dot.blue { background: #007bff; }
-.dot.green { background: #28a745; }
-.dot.red { background: #dc3545; }
-.dot.orange { background: #fd7e14; }
+.dot.blue {
+  background: #3b82f6;
+}
+.dot.green {
+  background: #10b981;
+}
+.dot.red {
+  background: #ef4444;
+}
+.dot.orange {
+  background: #f97316;
+}
 
 .event-info {
   flex: 1;
 }
 
 .event-title {
-  font-size: 14px;
   font-weight: 500;
+  margin: 0 0 4px 0;
 }
 
 .event-time {
-  font-size: 12px;
-  color: #666;
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0;
 }
 
+/* Event Actions */
 .event-actions {
   display: flex;
-  gap: 8px;
+  gap: 10px;
 }
 
 .event-actions button {
-  background: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
   border: none;
   cursor: pointer;
-  padding: 4px;
+  font-weight: 500;
+  transition: all 0.3s ease;
 }
 
-.event-actions button:hover img {
-  filter: brightness(0.6);
+.edit-btn {
+  background: #facc15;
+  color: #374151;
+}
+.edit-btn:hover {
+  background: #eab308;
+  transform: translateY(-2px);
 }
 
-/* ---------- Event Form Modal ---------- */
+.delete-btn {
+  background: #ef4444;
+  color: white;
+}
+.delete-btn:hover {
+  background: #dc2626;
+  transform: translateY(-2px);
+}
+
+/* Event Form */
 .event-form {
   position: fixed;
   top: 50%;
   left: 50%;
-  width: 360px;
-  background: #fff;
+  transform: translate(-50%, -50%);
+  background: white;
   padding: 25px;
   border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-  transform: translate(-50%, -50%);
-  z-index: 1000;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  z-index: 999;
 }
 
 .event-form h3 {
-  margin-bottom: 15px;
-  font-size: 18px;
+  margin: 0;
+  font-size: 20px;
   font-weight: 600;
-  text-align: center;
 }
 
 .event-form input,
 .event-form select {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 12px;
-  border: 1px solid #ccc;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
   border-radius: 8px;
   font-size: 14px;
+  outline: none;
 }
 
+.event-form input:focus,
+.event-form select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+/* Form Buttons */
 .form-actions {
   display: flex;
-  justify-content: flex-end;
   gap: 10px;
+  justify-content: flex-end;
 }
 
 .save-btn {
-  background: #007bff;
-  color: #fff;
+  background: #3b82f6;
+  color: white;
   border: none;
-  padding: 8px 16px;
+  padding: 10px 16px;
   border-radius: 8px;
   cursor: pointer;
-  transition: 0.3s;
+  font-weight: 500;
 }
-
 .save-btn:hover {
-  background: #0066d6;
+  background: #2563eb;
 }
 
 .cancel-btn {
-  background: #f1f3f6;
+  background: #f3f4f6;
+  color: #374151;
   border: none;
-  padding: 8px 16px;
+  padding: 10px 16px;
   border-radius: 8px;
   cursor: pointer;
-  transition: 0.3s;
 }
-
 .cancel-btn:hover {
-  background: #e1e3e8;
+  background: #e5e7eb;
 }
 
-/* ---------- Overlay (Optional) ---------- */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.3);
-  z-index: 900;
+/* Responsive */
+@media (max-width: 768px) {
+  .schedule-body {
+    flex-direction: column;
+  }
+  .calendar-view,
+  .events-view {
+    flex: 1 1 100%;
+  }
+  .event-form {
+    width: 90%;
+  }
+}
+
+@media (max-width: 480px) {
+  .schedule-header h1 {
+    font-size: 24px;
+  }
+  .event-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .event-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
 }

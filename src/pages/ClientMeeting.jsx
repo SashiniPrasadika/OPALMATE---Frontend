@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import "./ClientMeeting.css";
-import calendarIcon from "../assets/calendar.png";
-import clockIcon from "../assets/clock.png";
 
 const ClientMeeting = () => {
   const [meetings, setMeetings] = useState([
@@ -100,14 +98,8 @@ const ClientMeeting = () => {
               </span>
             </div>
             <div className="clientmeeting-details">
-              <p>
-                <img src={calendarIcon} alt="Date" className="icon-img" />
-                {m.date}
-              </p>
-              <p>
-                <img src={clockIcon} alt="Time" className="icon-img" />
-                {m.time}
-              </p>
+              <p>Date: {m.date}</p>
+              <p>Time: {m.time}</p>
               <p>Purpose: {m.purpose}</p>
               <p className="notes">Notes: {m.notes}</p>
             </div>
@@ -129,10 +121,7 @@ const ClientMeeting = () => {
       {/* Modal Form */}
       {formVisible && (
         <div className="modal-overlay" onClick={() => setFormVisible(false)}>
-          <div
-            className="modal-content"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <h3>{editingMeeting ? "Edit Meeting" : "Add New Meeting"}</h3>
             <input
               type="text"
@@ -202,4 +191,3 @@ const ClientMeeting = () => {
 };
 
 export default ClientMeeting;
-
