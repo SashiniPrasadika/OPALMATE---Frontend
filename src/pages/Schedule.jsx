@@ -1,47 +1,49 @@
 import React, { useState, useEffect } from "react";
-import "./Employees.css"; // you can reuse your Customers CSS
+import "./Employees.css"; // you can create Schedule.css if needed
 import {
-  getEmployees,
-  addEmployee,
-  updateEmployee,
-  deleteEmployee,
-} from "../api/employees";
+  getSchedules,
+  addSchedule,
+  updateSchedule,
+  deleteSchedule,
+} from "../api/schedules";
 
 const Schedule = () => {
-  const [events, setEvents] = useState([
-    { id: 1, title: "Mrs. Sharma - Ring Selection", time: "14:00", color: "blue" },
-    { id: 2, title: "Workshop - Polishing", time: "10:00", color: "green" },
-  ]);
-
+  const [events, setEvents] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [editingEvent, setEditingEvent] = useState(null);
-  const [formData, setFormData] = useState({
-    title: "",
-    time: "",
-    color: "blue",
-  });
+  const [formData, setFormData] = useState({ title: "", time: "", color: "blue" });
+
+  // Fetch schedules on load
+  useEffect(() => {
+    fetchSchedules();
+  }, []);
+
+  const fetchSchedules = async () => {
+    try {
+      const { data } = await getSchedules();
+      setEvents(data);
+    } catch (error) {
+      console.error("Error fetching schedules:", error);
+    }
+  };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (editingEvent) {
-      // Update existing event
-      setEvents(
-        events.map((ev) =>
-          ev.id === editingEvent.id ? { ...ev, ...formData } : ev
-        )
-      );
-      setEditingEvent(null);
-    } else {
-      // Add new event
-      const newEvent = { id: Date.now(), ...formData };
-      setEvents([...events, newEvent]);
+    try {
+      if (editingEvent) {
+        await updateSchedule(editingEvent.schedule_id, formData);
+      } else {
+        await addSchedule(formData);
+      }
+      fetchSchedules();
+      resetForm();
+    } catch (error) {
+      console.error("Error saving schedule:", error);
     }
-    setFormData({ title: "", time: "", color: "blue" });
-    setShowForm(false);
   };
 
   const handleEdit = (event) => {
@@ -54,8 +56,19 @@ const Schedule = () => {
     setShowForm(true);
   };
 
-  const handleDelete = (id) => {
-    setEvents(events.filter((ev) => ev.id !== id));
+  const handleDelete = async (id) => {
+    try {
+      await deleteSchedule(id);
+      fetchSchedules();
+    } catch (error) {
+      console.error("Error deleting schedule:", error);
+    }
+  };
+
+  const resetForm = () => {
+    setFormData({ title: "", time: "", color: "blue" });
+    setShowForm(false);
+    setEditingEvent(null);
   };
 
   return (
@@ -71,19 +84,11 @@ const Schedule = () => {
       </div>
 
       <div className="schedule-body">
-        {/* Calendar placeholder */}
-        <div className="calendar-view">
-          <h3>Calendar View</h3>
-          <div className="calendar-placeholder">
-            <p>Calendar component will be implemented here</p>
-          </div>
-        </div>
-
-        {/* Today's Events */}
         <div className="events-view">
           <h3>Today's Events</h3>
+          {events.length === 0 && <p>No events scheduled</p>}
           {events.map((event) => (
-            <div key={event.id} className="event-card">
+            <div key={event.schedule_id} className="event-card">
               <span className={`dot ${event.color}`}></span>
               <div className="event-info">
                 <p className="event-title">{event.title}</p>
@@ -93,7 +98,10 @@ const Schedule = () => {
                 <button className="edit-btn" onClick={() => handleEdit(event)}>
                   Edit
                 </button>
-                <button className="delete-btn" onClick={() => handleDelete(event.id)}>
+                <button
+                  className="delete-btn"
+                  onClick={() => handleDelete(event.schedule_id)}
+                >
                   Delete
                 </button>
               </div>
@@ -102,7 +110,6 @@ const Schedule = () => {
         </div>
       </div>
 
-      {/* Event Form */}
       {showForm && (
         <form className="event-form" onSubmit={handleSubmit}>
           <h3>{editingEvent ? "Edit Event" : "Add New Event"}</h3>
@@ -117,7 +124,6 @@ const Schedule = () => {
           <input
             type="time"
             name="time"
-            placeholder="Event Time"
             value={formData.time}
             onChange={handleChange}
             required
@@ -132,14 +138,7 @@ const Schedule = () => {
             <button type="submit" className="save-btn">
               {editingEvent ? "Update" : "Save"}
             </button>
-            <button
-              type="button"
-              className="cancel-btn"
-              onClick={() => {
-                setShowForm(false);
-                setEditingEvent(null);
-              }}
-            >
+            <button type="button" className="cancel-btn" onClick={resetForm}>
               Cancel
             </button>
           </div>
