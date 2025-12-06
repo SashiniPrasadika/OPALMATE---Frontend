@@ -1,13 +1,15 @@
+/* Container */
 .stock-alerts-container {
   max-width: 1100px;
   margin: 40px auto;
-  padding: 30px;
-  background-color: #f8fbff;
-  border-radius: 16px;
+  padding: 25px;
   font-family: 'Poppins', sans-serif;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  background: #f9fbfd;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
+/* Header */
 .alerts-header {
   display: flex;
   justify-content: space-between;
@@ -17,131 +19,205 @@
 
 .alerts-header h1 {
   font-size: 28px;
-  color: #003366;
+  font-weight: 700;
+  color: #1a202c;
 }
 
 .alerts-header p {
-  color: #555;
   font-size: 14px;
+  color: #4a5568;
+  margin-top: 4px;
 }
 
+/* Add Button */
 .btn-add {
-  padding: 10px 18px;
-  background-color: #007bff;
-  color: white;
+  background: linear-gradient(90deg, #4ade80, #22d3ee);
+  color: #fff;
   border: none;
+  padding: 8px 14px;
   border-radius: 8px;
+  font-weight: 500;
   cursor: pointer;
+  transition: 0.3s ease;
 }
 
 .btn-add:hover {
-  background-color: #0056b3;
+  transform: translateY(-1px);
+  opacity: 0.9;
 }
 
-.alert-form {
-  background: #ffffff;
-  padding: 20px;
+/* Alerts Cards Grid */
+.alerts-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+/* Individual Alert Card */
+.alert-card {
+  background: #fff;
   border-radius: 12px;
-  margin-bottom: 25px;
+  padding: 18px 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transition: 0.3s ease;
+}
+
+.alert-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
+
+.alert-card h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 8px;
+}
+
+.alert-card p {
+  font-size: 14px;
+  color: #4a5568;
+  margin: 4px 0;
+}
+
+.alert-level {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 12px;
+  margin-top: 8px;
+}
+
+.alert-level.low {
+  background-color: #d1fae5;
+  color: #047857;
+}
+
+.alert-level.critical {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+.alert-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.btn-edit, .btn-delete {
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.btn-edit {
+  background-color: #60a5fa;
+  color: #fff;
+}
+
+.btn-edit:hover {
+  background-color: #3b82f6;
+}
+
+.btn-delete {
+  background-color: #f87171;
+  color: #fff;
+}
+
+.btn-delete:hover {
+  background-color: #ef4444;
+}
+
+/* Modal Form */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  width: 400px;
   display: flex;
   flex-direction: column;
   gap: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
 }
 
-.alert-form input,
-.alert-form select {
+.modal-content h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a202c;
+  margin-bottom: 10px;
+}
+
+.modal-content input,
+.modal-content select {
   padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
   font-size: 14px;
+  outline: none;
 }
 
+.modal-content input:focus,
+.modal-content select:focus {
+  border-color: #60a5fa;
+}
+
+/* Modal Form Buttons */
 .form-buttons {
   display: flex;
-  gap: 10px;
   justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
 }
 
 .form-buttons button {
   padding: 8px 14px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
+  border-radius: 8px;
   font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: 0.3s ease;
 }
 
-.form-buttons button:first-child {
-  background-color: #007bff;
+.form-buttons button[type="submit"] {
+  background: linear-gradient(90deg, #4ade80, #22d3ee);
   color: #fff;
 }
 
-.form-buttons button:last-child {
-  background-color: #ccc;
+.form-buttons button[type="submit"]:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.form-buttons button[type="button"] {
+  background: #e2e8f0;
+  color: #1a202c;
+}
+
+.form-buttons button[type="button"]:hover {
+  background: #cbd5e1;
 }
 
 .no-alerts {
   text-align: center;
-  font-size: 16px;
-  color: #555;
-  margin-top: 20px;
-}
-
-.stock-alerts-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
-}
-
-.stock-alerts-table th,
-.stock-alerts-table td {
-  padding: 12px 15px;
-  text-align: left;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.stock-alerts-table th {
-  background-color: #f1f5f9;
-  font-weight: 600;
-  color: #1a202c;
-}
-
-.stock-alerts-table td {
-  color: #4a5568;
-}
-
-.stock-alerts-table td.low {
-  color: #d97706;
-  font-weight: 600;
-}
-
-.stock-alerts-table td.critical {
-  color: #dc2626;
-  font-weight: 600;
-}
-
-.stock-alerts-table button {
-  padding: 6px 12px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
   font-size: 14px;
-  margin-right: 6px;
-}
-
-.btn-edit {
-  background-color: #fbbf24;
-  color: white;
-}
-
-.btn-edit:hover {
-  background-color: #f59e0b;
-}
-
-.btn-delete {
-  background-color: #ef4444;
-  color: white;
-}
-
-.btn-delete:hover {
-  background-color: #dc2626;
+  color: #4a5568;
+  margin-top: 20px;
 }

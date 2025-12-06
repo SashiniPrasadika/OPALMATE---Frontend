@@ -13,7 +13,10 @@ const StockAlerts = () => {
     alert_level: "Low",
   });
 
-  // Fetch alerts from backend
+  useEffect(() => {
+    fetchAlerts();
+  }, []);
+
   const fetchAlerts = async () => {
     try {
       const data = await getAlerts();
@@ -23,16 +26,10 @@ const StockAlerts = () => {
     }
   };
 
-  useEffect(() => {
-    fetchAlerts();
-  }, []);
-
-  // Handle input change
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Add or update alert
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -50,19 +47,12 @@ const StockAlerts = () => {
     }
   };
 
-  // Edit alert
   const handleEdit = (alert) => {
     setEditingAlert(alert);
-    setFormData({
-      product: alert.product,
-      current_stock: alert.current_stock,
-      threshold: alert.threshold,
-      alert_level: alert.alert_level,
-    });
+    setFormData({ ...alert });
     setShowForm(true);
   };
 
-  // Delete alert
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to remove this alert?")) {
       try {
@@ -82,71 +72,67 @@ const StockAlerts = () => {
         <button className="btn-add" onClick={() => setShowForm(true)}>Add Alert</button>
       </header>
 
-      {showForm && (
-        <form className="alert-form" onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="product"
-            placeholder="Product Name"
-            value={formData.product}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="number"
-            name="current_stock"
-            placeholder="Current Stock"
-            value={formData.current_stock}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="number"
-            name="threshold"
-            placeholder="Threshold"
-            value={formData.threshold}
-            onChange={handleChange}
-            required
-          />
-          <select name="alert_level" value={formData.alert_level} onChange={handleChange}>
-            <option value="Low">Low</option>
-            <option value="Critical">Critical</option>
-          </select>
-          <div className="form-buttons">
-            <button type="submit">{editingAlert ? "Update" : "Add"} Alert</button>
-            <button type="button" onClick={() => { setShowForm(false); setEditingAlert(null); }}>Cancel</button>
-          </div>
-        </form>
-      )}
-
+      {/* Cards */}
       {alerts.length === 0 ? (
         <p className="no-alerts">All stock levels are sufficient.</p>
       ) : (
-        <table className="stock-alerts-table">
-          <thead>
-            <tr>
-              <th>Product</th>
-              <th>Current Stock</th>
-              <th>Threshold</th>
-              <th>Alert Level</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {alerts.map((alert) => (
-              <tr key={alert.alert_id}>
-                <td>{alert.product}</td>
-                <td>{alert.current_stock}</td>
-                <td>{alert.threshold}</td>
-                <td className={alert.alert_level.toLowerCase()}>{alert.alert_level}</td>
-                <td>
-                  <button className="btn-edit" onClick={() => handleEdit(alert)}>Edit</button>
-                  <button className="btn-delete" onClick={() => handleDelete(alert.alert_id)}>Delete</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="alerts-cards">
+          {alerts.map((alert) => (
+            <div className="alert-card" key={alert.alert_id}>
+              <h3>{alert.product}</h3>
+              <p><strong>Current Stock:</strong> {alert.current_stock}</p>
+              <p><strong>Threshold:</strong> {alert.threshold}</p>
+              <span className={`alert-level ${alert.alert_level.toLowerCase()}`}>
+                {alert.alert_level}
+              </span>
+              <div className="alert-actions">
+                <button className="btn-edit" onClick={() => handleEdit(alert)}>Edit</button>
+                <button className="btn-delete" onClick={() => handleDelete(alert.alert_id)}>Delete</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Modal Form */}
+      {showForm && (
+        <div className="modal">
+          <div className="modal-content">
+            <h3>{editingAlert ? "Edit Alert" : "Add Alert"}</h3>
+            <input
+              type="text"
+              name="product"
+              placeholder="Product Name"
+              value={formData.product}
+              onChange={handleChange}
+              required
+            />
+            <input
+              type="number"
+              name="current_stock"
+              placeholder="Current Stock"
+              value={formData.current_stock}
+              onChange={handleChange}
+              required
+            />
+            <input
+              type="number"
+              name="threshold"
+              placeholder="Threshold"
+              value={formData.threshold}
+              onChange={handleChange}
+              required
+            />
+            <select name="alert_level" value={formData.alert_level} onChange={handleChange}>
+              <option value="Low">Low</option>
+              <option value="Critical">Critical</option>
+            </select>
+            <div className="form-buttons">
+              <button type="submit" onClick={handleSubmit}>{editingAlert ? "Update" : "Add"} Alert</button>
+              <button type="button" onClick={() => { setShowForm(false); setEditingAlert(null); }}>Cancel</button>
+            </div>
+          </div>
+        </div>
       )}
     </section>
   );

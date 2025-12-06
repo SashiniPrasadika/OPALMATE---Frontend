@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./Employees.css"; // you can create Schedule.css if needed
+import "./Schedule.css"; // make sure this CSS is used
 import {
   getSchedules,
   addSchedule,
@@ -13,7 +13,6 @@ const Schedule = () => {
   const [editingEvent, setEditingEvent] = useState(null);
   const [formData, setFormData] = useState({ title: "", time: "", color: "blue" });
 
-  // Fetch schedules on load
   useEffect(() => {
     fetchSchedules();
   }, []);
@@ -110,42 +109,46 @@ const Schedule = () => {
         </div>
       </div>
 
+      {/* Modal Form */}
       {showForm && (
-        <form className="event-form" onSubmit={handleSubmit}>
-          <h3>{editingEvent ? "Edit Event" : "Add New Event"}</h3>
-          <input
-            type="text"
-            name="title"
-            placeholder="Event Title"
-            value={formData.title}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="time"
-            name="time"
-            value={formData.time}
-            onChange={handleChange}
-            required
-          />
-          <select name="color" value={formData.color} onChange={handleChange}>
-            <option value="blue">Blue</option>
-            <option value="green">Green</option>
-            <option value="red">Red</option>
-            <option value="orange">Orange</option>
-          </select>
-          <div className="form-actions">
-            <button type="submit" className="save-btn">
-              {editingEvent ? "Update" : "Save"}
-            </button>
-            <button type="button" className="cancel-btn" onClick={resetForm}>
-              Cancel
-            </button>
+        <div className="event-form">
+          <div className="form-content">
+            <h3>{editingEvent ? "Edit Event" : "Add New Event"}</h3>
+            <input
+              type="text"
+              name="title"
+              placeholder="Event Title"
+              value={formData.title}
+              onChange={handleChange}
+              required
+            />
+            <input
+              type="time"
+              name="time"
+              value={formData.time}
+              onChange={handleChange}
+              required
+            />
+            <select name="color" value={formData.color} onChange={handleChange}>
+              <option value="blue">Blue</option>
+              <option value="green">Green</option>
+              <option value="red">Red</option>
+              <option value="orange">Orange</option>
+            </select>
+            <div className="form-actions">
+              <button type="submit" className="save-btn" onClick={handleSubmit}>
+                {editingEvent ? "Update" : "Save"}
+              </button>
+              <button type="button" className="cancel-btn" onClick={resetForm}>
+                Cancel
+              </button>
+            </div>
           </div>
-        </form>
+        </div>
       )}
     </div>
   );
 };
 
 export default Schedule;
+
